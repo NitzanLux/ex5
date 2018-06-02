@@ -181,9 +181,9 @@ class FilterFactory {
      */
     FileFilter getFilter(String filterName, boolean isUphold){
         FileStateComperison fileStateComperisonFilter=null;
-        for (FileStateComperison currntFilter:FileStateComperison.values()) {
-            if (filterName.equals(currntFilter.toString().toLowerCase())){
-                fileStateComperisonFilter=currntFilter;
+        for (FileStateComperison currantFilter:FileStateComperison.values()) {
+            if (filterName.equals(currantFilter.toString().toLowerCase())){
+                fileStateComperisonFilter=currantFilter;
             }
         }
         if (fileStateComperisonFilter==null){
@@ -203,7 +203,7 @@ class FilterFactory {
             return new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {//todo lambda
-                    return false;
+                    return true;
                 }
             } ;
             }
