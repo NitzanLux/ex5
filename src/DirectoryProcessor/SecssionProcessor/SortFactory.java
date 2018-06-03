@@ -9,9 +9,12 @@ class SortFactory {
 
     private SortFactory() {
     }
+    public static SortFactory getInstance() {
+        return instance;
+    }
     /*
-    *  enum of all kind of sort.
-     */
+        *  enum of all kind of sort.
+         */
     private enum Sort {
         ABS() {
             int compareIt(FileFacade currentFile, FileFacade fileToComper) {
@@ -79,6 +82,9 @@ class SortFactory {
                 return sorter.compareIt(fileFacade, t1) * revers;
             }
         };
+    }
+    Comparator<FileFacade> getAbsComperator(){
+        return getComperator(Sort.ABS.toString(),true);
     }
 }
 

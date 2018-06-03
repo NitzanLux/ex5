@@ -239,4 +239,7 @@ class FilterFactory {
             }
             return null;
         }
+    FileFilter getAllFilter(){
+        return getFilter("all");//todo megic numb
     }
+}
