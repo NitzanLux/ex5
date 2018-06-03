@@ -49,6 +49,23 @@ public class FileFacade  {
     public boolean canExecute(){
         return file.canExecute();
     }
+    public String getAbsolutePath(){
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * get the fileType by last dot.
+     * @return fileType
+     */
+    public String getType(){
+       String fileType=null;
+        int lastDot=file.getName().lastIndexOf(".");//todo megic number
+        String fileName=file.getName();
+        if (lastDot!=-1){//todo megic number
+        fileType=fileName.substring(++lastDot);//TODO megic number
+       }
+        return fileType;
+    }
 
 
 }

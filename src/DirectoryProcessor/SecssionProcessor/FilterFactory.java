@@ -1,4 +1,4 @@
-package DirectoryProcessor;
+package DirectoryProcessor.SecssionProcessor;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -30,6 +30,14 @@ class FilterFactory {
         boolean isFilterd(File file, long threshold) {
             return filterd(file.length(), threshold);
         }
+        /**
+         * override the enum metod return the enum name with lowercase.
+         * @return enum name with lower case .
+         */
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
 
     }
 
@@ -56,6 +64,14 @@ class FilterFactory {
         };
 
         abstract boolean isFilterd(File file, String parameter);
+        /**
+         * override the enum metod return the enum name with lowercase.
+         * @return enum name with lower case .
+         */
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
 
         static private boolean prefixEquals(File file, String parameter, boolean fromStart) {
             String fileName = file.getName();
@@ -95,6 +111,14 @@ class FilterFactory {
         };
 
         abstract boolean isFilterd(File file);
+        /**
+         * override the enum metod return the enum name with lowercase.
+         * @return enum name with lower case .
+         */
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
     }
 
     static FilterFactory getInstance() {
@@ -110,7 +134,7 @@ class FilterFactory {
     FileFilter getFilter(String filterName, int threshold) {
         MathComperison mathFilter = null;
         for (MathComperison filter : MathComperison.values()) {
-            if (filterName.equals(filter.toString().toLowerCase())) {
+            if (filterName.equals(filter.toString())) {
                 mathFilter = filter;
             }
         }
@@ -156,7 +180,7 @@ class FilterFactory {
     FileFilter getFilter(String filterName, String searchValue) {
         NameComperison nameComperisonFilter=null;
         for (NameComperison currentValue:NameComperison.values()){
-            if (filterName.equals(currentValue.toString().toLowerCase())){
+            if (filterName.equals(currentValue.toString())){
                 nameComperisonFilter=currentValue;
             }
         }
@@ -182,7 +206,7 @@ class FilterFactory {
     FileFilter getFilter(String filterName, boolean isUphold){
         FileStateComperison fileStateComperisonFilter=null;
         for (FileStateComperison currntFilter:FileStateComperison.values()) {
-            if (filterName.equals(currntFilter.toString().toLowerCase())){
+            if (filterName.equals(currntFilter.toString())){
                 fileStateComperisonFilter=currntFilter;
             }
         }
@@ -198,6 +222,12 @@ class FilterFactory {
             };
         }
     }
+
+    /*
+     *get filter based on none critiryon (all filter).
+     * @param filterName the filter name.
+     * @return FileFilter instance.
+     */
     FileFilter getFilter(String filterName){
         if (filterName.equals("all")) {//todo megic num
             return new FileFilter() {
