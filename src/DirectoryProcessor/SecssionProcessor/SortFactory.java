@@ -4,7 +4,7 @@ import DirectoryProcessor.FileFacade;
 
 import java.util.Comparator;
 
-class SortFactory {
+public class SortFactory {
     private static SortFactory instance = new SortFactory();
 
     private SortFactory() {

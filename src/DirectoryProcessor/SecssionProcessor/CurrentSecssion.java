@@ -16,35 +16,169 @@ public class CurrentSecssion {
         currentSort =null;
         currentFileFilter=null;
     }
+    public static CurrentSecssion getInstance() {
+        return instance;
+    }
+
+    /**
+     * set the currnt path name for extraction.
+     * @param pathName the path name.
+     */
     public void setPathName(String pathName) {
         this.pathName = new FileFacade(pathName);
     }
-    public String[] getCurrentSessionOutput(String filterName,String orderName){
+
+    /**
+     * get currnt Session list of files.
+     * @param filterName the filter key name.
+     * @param orderName the order key name.
+     * @return orderd array of files names.
+     * @throws SecssionCreationException.FilterCreationException cannot create filter set filter to default.
+     * @throws SecssionCreationException.SorterCreationException cannot create sorter set sorter to default.
+     */
+    public String[] getCurrentSessionOutput(String filterName,String orderName)
+            throws SecssionCreationException.FilterCreationException,
+            SecssionCreationException.SorterCreationException {
         setFileFilter(filterName);
         setSorter(orderName);
         FileFacade[] files=pathName.listFiles(currentFileFilter);
         Arrays.sort(files,currentSort);
+        String[] secssionFilesOutputNames=new String[files.length];
+        for (int i = 0; i <files.length ; i++) {
+            secssionFilesOutputNames[i]=files[i].getName();
+        }
+        return secssionFilesOutputNames;
     }
-    private void setFileFilter(String filterKey){
-        if (filterKey==null){
-            currentFileFilter= FilterFactory.getInstance().getAllFilter();
-            //todo throw the exeption
-        }else {
 
+    private void setFileFilter(String filterKey) throws SecssionCreationException.FilterCreationException {
+        FileFilter currentFileFilter = readFilterKey(filterKey);
+        if (currentFileFilter == null){
+            this.currentFileFilter=FilterFactory.getInstance().getAllFilter();
+            throw new SecssionCreationException.FilterCreationException();
+            }else {
+                this.currentFileFilter=currentFileFilter;
+            }
         }
 
+    /*
+     * convert filter string into a FileFilter Object.
+      * @param filterKey the filter requst string.
+     * @return FileFilter
+     */
+    private FileFilter readFilterKey(String filterKey){
+        String[] values=filterKey.split("#");//todo megic number
+        String filterName=values[0];
+        //indicative variables( if varible does not exists then it is null).
+        Double firstDouble=null;
+        Double secondDouble=null;
+        Boolean firstBoolean=null;
+        String stringToFilter=null;
+        int notOperationInclude=0;
+        boolean notOperation=false;
+        for (int i = 1; i <values.length ; i++) {
+            if (isDouble(values[i])){
+                if (firstDouble==null){
+                    firstDouble=Double.parseDouble(values[i]);
+                }else {
+                    secondDouble=Double.parseDouble(values[i]);
+                }
+            }else if (isBoolean(values[i])!=null){
+                firstBoolean=isBoolean(values[i]);
+            }else if (values[i].equals("NOT")&&!notOperation){//todo megic number.
+                notOperation=true;
+                notOperationInclude++;
+            }else {
+                stringToFilter=values[i];
+            }
+        }
+        return getFilter(values.length-notOperationInclude, filterName,firstDouble,secondDouble,
+                stringToFilter,firstBoolean, notOperation);
+    }//todo make it shorter!.
+
+    /*
+     * this method return a filter by the veriabls that had been read from the filter string
+     * @param currentSize the number of valus without the not operation.
+     * @param filterName the filter key name
+     * @param firstDouble the double arg(if exists)
+     * @param secondDouble the second doubler arg(if exists , for between filter)
+     * @param stringToFilter the String search key (if exists)
+     * @param firstBoolean the isUphold boolean(if exists)
+     * @param notOperation is the Not operation exists
+     * @return FileFilter if args are valid.
+     */
+    private FileFilter getFilter(int currentSize,String filterName,Double firstDouble,Double secondDouble,
+                                 String stringToFilter,Boolean firstBoolean,boolean notOperation){
+        switch (currentSize){
+            case 1:
+                return FilterFactory.getInstance().getFilter(filterName,notOperation);
+            case 2:
+                if (firstBoolean!=null){
+                    return FilterFactory.getInstance().getFilter(filterName,firstBoolean,notOperation);
+                }else if (firstDouble!=null){
+                    return FilterFactory.getInstance().getFilter(filterName,firstDouble,notOperation);
+                }else if (stringToFilter!=null){
+                    return FilterFactory.getInstance().getFilter(filterName,stringToFilter,notOperation);
+                }break;
+            case 3:
+                if (firstDouble!=null&&secondDouble!=null){
+                    return FilterFactory.getInstance().getFilter(filterName,secondDouble,firstDouble,notOperation);
+                }
+        }
+        return null;
     }
-    private void setSorter(String sorterKey){
-        if (sorterKey==null){
+    /*
+    * return true if the string is boolean yes and false if it is no, return null if the string isnt yes/no
+     */
+    private Boolean isBoolean(String stringToCheck){
+        if (stringToCheck.equals("NO")){//todo megic number
+            return false;
+        }else if (stringToCheck.equals("YES")){//todo megic number
+            return true;
+        }
+        return null;
+    }
+
+    /*
+     * determine if the corrnt string is double.
+     * @param stringToCheck
+     * @return true if it can be pars into double.
+     */
+    private boolean isDouble(String stringToCheck){
+        boolean isDotExists=false;
+        for (int i = 0; i <stringToCheck.length(); i++) {
+            int asciiOfChar=(int)stringToCheck.charAt(i);
+            if (!((asciiOfChar<=57&&asciiOfChar>=48)||(asciiOfChar==46&&!isDotExists&&i!=0 && i!=(stringToCheck.length()-1)))){//todo megic number
+                return false;
+            }
+            if (asciiOfChar==46){//todo megic number
+                isDotExists=true;
+            }
+        }
+        return true;
+    }
+    private void setSorter(String sorterKey) throws SecssionCreationException.SorterCreationException {
+        Comparator<FileFacade> comparator=readSortKey(sorterKey);
+        if (comparator==null){
             currentSort= SortFactory.getInstance().getAbsComperator();
-            //todo throw the exption
+            throw new SecssionCreationException.SorterCreationException();
+        }else {
+            currentSort=comparator;
         }
     }
-
-    public static CurrentSecssion getInstance() {
-        return instance;
+    private Comparator<FileFacade> readSortKey(String sorterKey){
+        String[] values=sorterKey.split("#");//todo megic number
+        if (values.length>2||values.length<1){
+            return null;
+        }
+        boolean isRevers= false;
+        String sorterName=values[0];
+        if (values.length==2){
+            if(!values[1].equals("REVERSE")){
+                return null;
+            }else {
+                isRevers=true;
+            }
+        }
+        return SortFactory.getInstance().getComperator(sorterName,isRevers);
     }
-    public void creatSecssion(String[] secssionStrings){
-    }
-
 }

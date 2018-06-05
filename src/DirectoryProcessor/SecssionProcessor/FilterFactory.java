@@ -6,29 +6,32 @@ import java.io.FileFilter;
 /*
  * singlton of filterFactory, genrate an FileFilter for sorting file.
  */
-class FilterFactory {
+public class FilterFactory {
     private static FilterFactory instance = new FilterFactory();
 
     private FilterFactory() {
     }
 
+    static FilterFactory getInstance() {
+        return instance;
+    }
 
     private enum MathComperison {
         GREATER_THAN() {
-            boolean filterd(long fileSize, long threshold) {
+            boolean filterd(double fileSize, double threshold) {
                 return fileSize > threshold;
             }
         },
         SMALLER_THAN() {
-            boolean filterd(long fileSize, long threshold) {
+            boolean filterd(double fileSize, double threshold) {
                 return fileSize < threshold;
             }
         };
 
-        abstract boolean filterd(long fileSize, long threshold);
+        abstract boolean filterd(double fileSize, double threshold);
 
-        boolean isFilterd(File file, long threshold) {
-            return filterd(file.length(), threshold);
+        boolean isFilterd(File file, double threshold) {
+            return filterd(file.length()/1024, threshold);
         }
         /**
          * override the enum metod return the enum name with lowercase.
@@ -40,6 +43,7 @@ class FilterFactory {
         }
 
     }
+
 
     private enum NameComperison {
         FILE() {
@@ -121,9 +125,6 @@ class FilterFactory {
         }
     }
 
-    static FilterFactory getInstance() {
-        return instance;
-    }
 
     /*
      * get filter using a threshold.
@@ -131,7 +132,7 @@ class FilterFactory {
      * @param threshold the threshold.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, int threshold) {
+    FileFilter getFilter(String filterName, double threshold,boolean isNot) {
         MathComperison mathFilter = null;
         for (MathComperison filter : MathComperison.values()) {
             if (filterName.equals(filter.toString())) {
@@ -145,7 +146,7 @@ class FilterFactory {
             return new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return mathComperisonFilter.isFilterd(pathname, threshold);
+                    return mathComperisonFilter.isFilterd(pathname, threshold)!=isNot;
                 }
             };
         }
@@ -158,15 +159,15 @@ class FilterFactory {
      * @param minBar the minimum threshold.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, int threshold, int minBar) {
-        if (!filterName.equals("between")) {
+    FileFilter getFilter(String filterName, double threshold, double minBar,boolean isNot) {
+        if (!filterName.equals("between")||minBar>threshold) {
             return null;
         }
         return new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return MathComperison.GREATER_THAN.isFilterd(pathname, minBar) &&
-                        MathComperison.SMALLER_THAN.isFilterd(pathname, threshold);
+                return (MathComperison.GREATER_THAN.isFilterd(pathname, minBar) &&
+                        MathComperison.SMALLER_THAN.isFilterd(pathname, threshold))!=isNot;
             }
         };
     }//todo megic number lambda
@@ -177,7 +178,7 @@ class FilterFactory {
      * @param searchValue a String key for searching in the file name.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, String searchValue) {
+    FileFilter getFilter(String filterName, String searchValue,boolean isNot) {
         NameComperison nameComperisonFilter=null;
         for (NameComperison currentValue:NameComperison.values()){
             if (filterName.equals(currentValue.toString())){
@@ -191,7 +192,7 @@ class FilterFactory {
             return new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return nameComperison.isFilterd(pathname,searchValue);
+                    return nameComperison.isFilterd(pathname,searchValue)!=isNot;
                 }
             };
         }
@@ -203,7 +204,7 @@ class FilterFactory {
      * @param isUphold is the uphold the current demend.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, boolean isUphold){
+    FileFilter getFilter(String filterName, boolean isUphold,boolean isNot){
         FileStateComperison fileStateComperisonFilter=null;
         for (FileStateComperison currntFilter:FileStateComperison.values()) {
             if (filterName.equals(currntFilter.toString())){
@@ -217,7 +218,8 @@ class FilterFactory {
             return new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return fileStateComperison.isFilterd(pathname)==isUphold;
+                    boolean answe = fileStateComperison.isFilterd(pathname);
+                    return answe==isUphold&& answe!=isNot;
                 }
             };
         }
@@ -228,18 +230,18 @@ class FilterFactory {
      * @param filterName the filter name.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName){
+    FileFilter getFilter(String filterName,boolean isNot){
         if (filterName.equals("all")) {//todo megic num
             return new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {//todo lambda
-                    return false;
+                    return !isNot;
                 }
             } ;
             }
             return null;
         }
-    FileFilter getAllFilter(){
-        return getFilter("all");//todo megic numb
+    public FileFilter getAllFilter(){
+        return getFilter("all",false);//todo megic numb
     }
 }
