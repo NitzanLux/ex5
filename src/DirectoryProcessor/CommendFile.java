@@ -2,11 +2,10 @@ package DirectoryProcessor;
 import java.io.*;
 import java.util.ArrayList;
 
-public class CommendFile extends FileFacade{
+public class CommendFile extends FileFacade {
     public CommendFile(String s) {
         super(s);
     }
-
 
     // The method reads the file, and returns an arrayList containing all the lines in the file
     ArrayList<String> readFile() {
@@ -28,6 +27,7 @@ public class CommendFile extends FileFacade{
         }
         return fileData;
     }
+}
 
             /**
                 while (line != null){
@@ -62,5 +62,4 @@ public class CommendFile extends FileFacade{
             //bufferedReader.close();
 */
 
-    }
-}
+
