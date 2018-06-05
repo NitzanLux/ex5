@@ -3,7 +3,6 @@ package DirectoryProcessor.SecssionProcessor;
 import DirectoryProcessor.FileFacade;
 
 import java.io.FileFilter;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -47,6 +46,8 @@ public class CurrentSecssion {
         for (int i = 0; i <files.length ; i++) {
             secssionFilesOutputNames[i]=files[i].getName();
         }
+        currentFileFilter=null;
+        currentSort=null;
         return secssionFilesOutputNames;
     }
 
