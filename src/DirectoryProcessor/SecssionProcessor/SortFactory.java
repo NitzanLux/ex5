@@ -4,12 +4,12 @@ import DirectoryProcessor.FileFacade;
 
 import java.util.Comparator;
 
-public class SortFactory {
+class SortFactory {
     private static SortFactory instance = new SortFactory();
 
     private SortFactory() {
     }
-    public static SortFactory getInstance() {
+    static SortFactory getInstance() {
         return instance;
     }
     /*
