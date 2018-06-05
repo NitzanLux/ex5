@@ -22,18 +22,21 @@ public class CurrentSecssion {
     public void setPathName(String pathName) {
         this.pathName = new FileFacade(pathName);
     }
-    public String[] getCurrentSessionOutput(String filterName,String orderName){
+    public String[] getCurrentSessionOutput(String filterName,String orderName)
+            throws SecssionCreationException.FilterCreationException,
+            SecssionCreationException.SorterCreationException {
         setFileFilter(filterName);
         setSorter(orderName);
         FileFacade[] files=pathName.listFiles(currentFileFilter);
         Arrays.sort(files,currentSort);
+        
     }
 
-    private void setFileFilter(String filterKey) {
+    private void setFileFilter(String filterKey) throws SecssionCreationException.FilterCreationException {
         FileFilter currentFileFilter = readFilterKey(filterKey);
         if (currentFileFilter == null){
             this.currentFileFilter=FilterFactory.getInstance().getAllFilter();
-            //todo throw
+            throw new SecssionCreationException.FilterCreationException();
             }else {
                 this.currentFileFilter=currentFileFilter;
             }
@@ -135,14 +138,30 @@ public class CurrentSecssion {
         }
         return true;
     }
-    private void setSorter(String sorterKey){
-        if (sorterKey==null){
+    private void setSorter(String sorterKey) throws SecssionCreationException.SorterCreationException {
+        Comparator<FileFacade> comparator=readSortKey(sorterKey);
+        if (comparator==null){
             currentSort= SortFactory.getInstance().getAbsComperator();
-            //todo throw the exption
+            throw new SecssionCreationException.SorterCreationException();
+        }else {
+            currentSort=comparator;
         }
     }
-    private void readSortKey(String sorterKey){
-
+    private Comparator<FileFacade> readSortKey(String sorterKey){
+        String[] values=sorterKey.split("#");//todo megic number
+        if (values.length>2||values.length<1){
+            return null;
+        }
+        boolean isRevers= false;
+        String sorterName=values[0];
+        if (values.length==2){
+            if(!values[1].equals("REVERSE")){
+                return null;
+            }else {
+                isRevers=true;
+            }
+        }
+        return SortFactory.getInstance().getComperator(sorterName,isRevers);
     }
 
     public void creatSecssion(String[] secssionStrings){
