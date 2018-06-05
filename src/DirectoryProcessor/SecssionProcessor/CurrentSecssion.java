@@ -19,9 +19,23 @@ public class CurrentSecssion {
     public static CurrentSecssion getInstance() {
         return instance;
     }
+
+    /**
+     * set the currnt path name for extraction.
+     * @param pathName the path name.
+     */
     public void setPathName(String pathName) {
         this.pathName = new FileFacade(pathName);
     }
+
+    /**
+     * get currnt Session list of files.
+     * @param filterName the filter key name.
+     * @param orderName the order key name.
+     * @return orderd array of files names.
+     * @throws SecssionCreationException.FilterCreationException cannot create filter set filter to default.
+     * @throws SecssionCreationException.SorterCreationException cannot create sorter set sorter to default.
+     */
     public String[] getCurrentSessionOutput(String filterName,String orderName)
             throws SecssionCreationException.FilterCreationException,
             SecssionCreationException.SorterCreationException {
@@ -29,7 +43,11 @@ public class CurrentSecssion {
         setSorter(orderName);
         FileFacade[] files=pathName.listFiles(currentFileFilter);
         Arrays.sort(files,currentSort);
-        
+        String[] secssionFilesOutputNames=new String[files.length];
+        for (int i = 0; i <files.length ; i++) {
+            secssionFilesOutputNames[i]=files[i].getName();
+        }
+        return secssionFilesOutputNames;
     }
 
     private void setFileFilter(String filterKey) throws SecssionCreationException.FilterCreationException {
@@ -163,8 +181,4 @@ public class CurrentSecssion {
         }
         return SortFactory.getInstance().getComperator(sorterName,isRevers);
     }
-
-    public void creatSecssion(String[] secssionStrings){
-    }
-
 }
