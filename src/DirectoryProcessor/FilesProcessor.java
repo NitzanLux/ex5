@@ -17,7 +17,7 @@ public class FilesProcessor {
                                                    TypeTwoExceptions.FileNotFoundException {
         checkArgs(args); // checks the validation of arguments, if valid, continues
         String commendFileName = args[1];
-        CommendFile commandFile = new CommendFile(commendFileName); // creates a new instance of CommendFile
+        CommandFile commandFile = new CommandFile(commendFileName); // creates a new instance of CommandFile
         // Checks if the commend file is a valid file, if not, throws exception
         if (!(commandFile.isFile())){
             throw new TypeTwoExceptions.FileNotFoundException();

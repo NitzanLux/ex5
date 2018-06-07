@@ -5,8 +5,8 @@ import java.util.ArrayList;
 /**
  * This class reads the text from the command file and saves it in an array list of Strings.
  */
-public class CommendFile extends FileFacade {
-    public CommendFile(String s) {
+public class CommandFile extends FileFacade {
+    public CommandFile(String s) {
         super(s);
     }
 
@@ -16,11 +16,11 @@ public class CommendFile extends FileFacade {
      */
     public ArrayList<String> readFile() {
 
-        ArrayList<String> fileData = new ArrayList<String>();
+        ArrayList<String> fileData = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.getName()))) {
 
-            String line = null;
+            String line;
             int i = 0;
             // runs all over the file, while the file not over, and adds each line to the arrayList
             while ((line = bufferedReader.readLine()) != null) {
@@ -32,7 +32,7 @@ public class CommendFile extends FileFacade {
         }
         return fileData;
     } // end of readFile method
-} // end of CommendFile class
+} // end of CommandFile class
 
 
 

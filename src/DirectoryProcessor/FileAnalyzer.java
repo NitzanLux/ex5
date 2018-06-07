@@ -31,7 +31,7 @@ public class FileAnalyzer {
             line = fileData.get(i);
             // Checks if the current line equals FILTER, if yes, will save the filter value
             if (line.compareTo(FILTER) == 0) {
-                nextLine = fileData.get(i +1);
+                nextLine = fileData.get(i+1);
                 filterValue = nextLine;
                 i += INCREASE_TWO;
                 line = fileData.get(i);
@@ -63,13 +63,13 @@ public class FileAnalyzer {
             }catch (SecessionCreationException.SorterCreationException e) {
                 // todo something
             }
-            //String[] filesToPrint = CurrentSecssion.getInstance().getCurrentSessionOutput();
+            //String[] filesToPrint = CurrentSecession.getInstance().getCurrentSessionOutput();
           //  printFiles(filesToPrint);
             //out.printf("the index is now: %d filterValue: %s orderValue: %s%n", i, filterValue, orderValue);
         } // end of for loop
     }
 
-    // private method to print the names of the filtered and sortered files
+    // private method to print the names of the filtered and sorted files
     private void printFiles(String[] filesToPrint){
         for (int i = 0; i< filesToPrint.length; i++){
             System.out.println(filesToPrint[i]);
@@ -86,23 +86,11 @@ public class FileAnalyzer {
             // This loop iterates through the array, for each section checks if in the section exists type 2 errors
             for (int i = 0; i < fileData.size(); i++) {
 
-                    i = checKFilter(fileData, i);
-                    filterValue = fileData.get(i);
+                i = checKFilter(fileData, i);
+                filterValue = fileData.get(i);
 
-                    i = checkOrder(fileData, i);
-
-
-              //  if (i < fileData.size()){
-              //      line = fileData.get(i);
-               //     if (line.compareTo(FILTER) == 0) {
-               //         orderValue = ABS_KEY_WORD;
-               //         i += INCREASE_ONE;
-              //      } else {
-              //          orderValue = line;
-               //         i += INCREASE_TWO;
-               //     }todo ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooowhata to do
-                //}
-            } // end of for loop
+                i = checkOrder(fileData, i);
+            }
      } // end of checkTypeTwoErrors method
 
 

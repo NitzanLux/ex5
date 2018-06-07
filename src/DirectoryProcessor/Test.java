@@ -9,7 +9,7 @@ public class Test {
 
         String name = "/cs/usr/liorait/IdeaProjects/ex5/text2.txt";
         ArrayList<String> as = new ArrayList<String>();
-        CommendFile cm = new CommendFile(name);
+        CommandFile cm = new CommandFile(name);
         if (cm.isFile()) {
 
                 as = cm.readFile();
