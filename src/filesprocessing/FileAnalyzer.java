@@ -12,6 +12,7 @@ import java.lang.*;
  *
  */
 class FileAnalyzer {
+    private static FileAnalyzer instance=new FileAnalyzer();
     /*--constants--*/
     private static final String FILTER_HEADLINE = "FILTER";
     private static final String ORDER  = "ORDER";
@@ -19,11 +20,19 @@ class FileAnalyzer {
     private static final int JUMP_TO_ORDER = 2;
     private static final String DEFAULT_SORTER = "abs";
 
-    private CurrentSecession currentSecession;
-
-    FileAnalyzer(CurrentSecession currentSecession){
-        this.currentSecession=currentSecession;
+    /*
+    * singlton constractor.
+     */
+    private FileAnalyzer(){
     }
+
+    /**
+     * @return file anlayzer instance.
+     */
+    public static FileAnalyzer getInstance() {
+        return instance;
+    }
+
     /* This method goes through the array list that contains the file data, First,
     * it looks for type 2 exceptions, if found,
     * it throws exceptions. If there are no type 2 exceptions, it goes over the file, and for each section
@@ -55,13 +64,13 @@ class FileAnalyzer {
                 }
             }
             try {
-                currentSecession.setFilterAndSorter(filterValue, orderValue);
+               CurrentSecession.getInstance().setFilterAndSorter(filterValue, orderValue);
             } catch (SecessionCreationException.FilterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, filterLine);
             }catch (SecessionCreationException.SorterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, orderLine);
             }
-            String[] outPutData = currentSecession.getCurrentSessionOutput();
+            String[] outPutData = CurrentSecession.getInstance().getCurrentSessionOutput();
             printFiles(outPutData);
         }
     }
@@ -102,14 +111,14 @@ class FileAnalyzer {
                 return lineNumber;
             }
         }//if the
-        if (fileData.get(lineNumber).toUpperCase().equals(ORDER)||fileData.get(lineNumber).
-                toUpperCase().equals(FILTER_HEADLINE)){
-            throw new  TypeTwoExceptions.BadFilterSectionName();
-        }else if (fileData.get(lineNumber).toUpperCase().equals(FILTER_HEADLINE)){
-        throw new TypeTwoExceptions.BadOrderSectionName();
-    }else {
-        throw new TypeTwoExceptions.BadFormatFile();
-    }
+        switch (fileData.get(lineNumber).toUpperCase()) {
+            case ORDER:
+                throw new TypeTwoExceptions.BadFilterSectionName();
+            case FILTER_HEADLINE:
+                throw new TypeTwoExceptions.BadOrderSectionName();
+            default:
+                throw new TypeTwoExceptions.BadFormatFile();
+        }
     } // end of checkFilter method
 
     private int checkOrder(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadOrderSectionName,
@@ -134,13 +143,13 @@ class FileAnalyzer {
             }
         }
 
-        if (fileData.get(lineNumber).toUpperCase().equals(ORDER)){
-            throw new  TypeTwoExceptions.BadFilterSectionName();
-        }else if (fileData.get(lineNumber).
-                toUpperCase().equals(FILTER_HEADLINE)){
-            throw new TypeTwoExceptions.BadOrderSectionName();
-        }else {
-            throw new TypeTwoExceptions.BadFormatFile();
+        switch (fileData.get(lineNumber).toUpperCase()) {
+            case ORDER:
+                throw new TypeTwoExceptions.BadFilterSectionName();
+            case FILTER_HEADLINE:
+                throw new TypeTwoExceptions.BadOrderSectionName();
+            default:
+                throw new TypeTwoExceptions.BadFormatFile();
         }
         }
 }

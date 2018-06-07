@@ -31,9 +31,8 @@ public class DirectoryProcessor {
         else{
             ArrayList<String> commendFileData = commandFile.readFile();// saves the command file's data to
             // an array list of Strings
-            CurrentSecession currentSecession=new CurrentSecession(path);
-            FileAnalyzer fileAnalyzer=new FileAnalyzer(currentSecession);
-            fileAnalyzer.analyzeStringList(commendFileData);
+            CurrentSecession.getInstance().setCurrentPath(path);
+            FileAnalyzer.getInstance().analyzeStringList(commendFileData);
         }
     }
 

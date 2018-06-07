@@ -9,6 +9,12 @@ import java.util.Comparator;
  * a singletone class which hold a one secssion every time , and process the section to the proper name of files.
  */
 public class CurrentSecession {
+    private static CurrentSecession instance=new CurrentSecession();
+
+    public static CurrentSecession getInstance() {
+        return instance;
+    }
+
     /* constants */
     private static final String VALUES_SEPARATOR = "#";
     private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";
@@ -28,9 +34,11 @@ public class CurrentSecession {
     /*
     * default constractor.
      */
-    public CurrentSecession(FileFacade path){
-        this.path =path;
+    private CurrentSecession(){
         setDefaultValus();
+    }
+    public void setCurrentPath(FileFacade path){
+        this.path=path;
     }
     /*
     * instance default values that are placed every new secession ittration.
