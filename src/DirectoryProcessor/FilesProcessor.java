@@ -15,8 +15,8 @@ public class FilesProcessor {
     private static final int COMMAND_NAME_POSITION = 1;
 
     public static void main(String [] args) throws TypeTwoExceptions.BadFilterSectionName, TypeTwoExceptions.BadOrderSectionName,
-                                                   TypeTwoExceptions.IncorrentAmountOfArguments,
-                                                   TypeTwoExceptions.FileNotFoundException {
+            TypeTwoExceptions.IncorrentAmountOfArguments,
+            TypeTwoExceptions.FileNotFoundException, TypeTwoExceptions.NoFilesInSourceDir {
         checkArgs(args); // checks the validation of arguments, if valid, continues
         String commendFileName = args[COMMAND_NAME_POSITION];
         CommandFile commandFile = new CommandFile(commendFileName); // creates a new instance of CommandFile
@@ -25,19 +25,16 @@ public class FilesProcessor {
         if (!(commandFile.isFile())){
             throw new TypeTwoExceptions.FileNotFoundException();
         }else if (!(path.isDirectory())){
-            throw new TypeTwoExceptions.FileNotFoundException();//todo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+            throw new TypeTwoExceptions.NoFilesInSourceDir();
         }
         else{
-            ArrayList<String> commendFileData = new ArrayList<String>();
-            commendFileData = commandFile.readFile(); // saves the command file's data to an array list of Strings
+            ArrayList<String> commendFileData = commandFile.readFile();// saves the command file's data to an array list of Strings
             CurrentSecssion.getInstance().setPath(path); // sets the path of the files
-            FileAnalyzer fileAnalyzer = new FileAnalyzer();
-            fileAnalyzer.analyzeStringList(commendFileData);
-
+            FileAnalyzer.getInstance().analyzeStringList(commendFileData);
         }
     }
 
-    public static void checkArgs(String[]args) throws TypeTwoExceptions.IncorrentAmountOfArguments { // todo add errors if the files or command file doesnt exist
+    private static void checkArgs(String[]args) throws TypeTwoExceptions.IncorrentAmountOfArguments { // todo add errors if the files or command file doesnt exist
 
         // Checks if the number of arguments is smaller then 2 - in this case throws exception and stops
         if (args.length < MIN_NUM_OF_ARGUMENTS){

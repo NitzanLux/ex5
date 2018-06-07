@@ -10,11 +10,17 @@ import java.lang.*;
  *
  */
 public class FileAnalyzer {
+    private static FileAnalyzer instance;
+    private FileAnalyzer(){}
+    public static FileAnalyzer getInstance() {
+        return instance;
+    }
+
     /*--constants--*/
-    private final static String FILTER = "FILTER";
-    private final static String ORDER  = "ORDER";
+    private static final String FILTER_HEADLINE = "FILTER";
+    private static final String ORDER  = "ORDER";
     private static final String TYPE_I_ERROR_MSG_STR_FORMAT = "Warning in line %d";
-    private final int JUMP_TO_ORDER = 2;
+    private static final int JUMP_TO_ORDER = 2;
     private static final String DEFAULT_SORTER = "abs";
 
     /* This method goes through the array list that contains the file data, First,
@@ -24,7 +30,6 @@ public class FileAnalyzer {
     */
     void analyzeStringList(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
             TypeTwoExceptions.BadOrderSectionName {
-
         checkTypeTwoErrors(fileData); // Checks if there are type 2 errors in the file
         String line = "";
         String filterValue = "";
@@ -33,31 +38,21 @@ public class FileAnalyzer {
         int filterLine=0;
         int orderLine=0;
         // This loop goes over the array list and filters and sorters files by each section
-        for (int i = 0; i < fileData.size(); ) {
-            line = fileData.get(i);
-            // Checks if the current line equals FILTER, if yes, will save the filter value
-            if (line.equals(FILTER)) {
-                filterValue = fileData.get(i+1);
-                filterLine=i+1;
-                i += JUMP_TO_ORDER;
-                line = fileData.get(i);
+        for (int i = 0; i < fileData.size();) {
+            i++;
+            if (i>=fileData.size()){
+                break;
             }
-            // Checks if the current line equals ORDER, if yes, will save the order value
-            if (line.equals(ORDER)) {
-                //if (fileData.get(i + INCREASE_ONE) != null) {
-                int j = i+1;
-                if(j < fileData.size()){
-                    nextLine = fileData.get(i + 1);
-                    if (nextLine.equals(FILTER)) {
-                        orderValue = DEFAULT_SORTER;
-                        i ++;
-                    } else {
-                        orderValue = nextLine;
-                        orderLine=i+1;
-                        i += JUMP_TO_ORDER;
-                    }
-                } else {
-                    orderValue = DEFAULT_SORTER;
+            filterValue=fileData.get(i);
+            i+= JUMP_TO_ORDER;
+            if (i>=fileData.size()){
+                orderValue=DEFAULT_SORTER;
+            }else {
+                if (fileData.get(i).equals(FILTER_HEADLINE)){
+                    orderValue=DEFAULT_SORTER;
+                }else {
+                    orderValue=fileData.get(i);
+                    i++;
                 }
             }
             try {
@@ -67,10 +62,8 @@ public class FileAnalyzer {
             }catch (SecessionCreationException.SorterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, orderLine);
             }
-            String[] outputData = CurrentSecssion.getInstance().getCurrentSessionOutput();
-            for (int j = 0; j <outputData.length ; j++) {
-                System.out.println(outputData[j]);
-            }
+            String[] outPutData = CurrentSecssion.getInstance().getCurrentSessionOutput();
+            printFiles(outPutData);
         }
     }
 
@@ -86,7 +79,6 @@ public class FileAnalyzer {
                                                                 TypeTwoExceptions.BadOrderSectionName {
             // This loop iterates through the array, for each section checks if in the section exists type 2 errors
             for (int i = 0; i < fileData.size(); i++) {
-
                 i = checkFilter(fileData, i);
                 i = checkOrder(fileData, i);
             }
@@ -100,7 +92,7 @@ public class FileAnalyzer {
         boolean isFilterHeadLine=false;
         boolean isFilterValue=false;
         for (int i = 0; i <3; i++) {
-            if(fileData.get(lineNumber).equals(FILTER)&&!isFilterHeadLine){
+            if(fileData.get(lineNumber).equals(FILTER_HEADLINE) && !isFilterHeadLine){
                 isFilterHeadLine=true;
                 lineNumber++;
             }else if (isFilterHeadLine&&!isFilterValue&&!(fileData.get(lineNumber).equals(ORDER))){
@@ -112,7 +104,7 @@ public class FileAnalyzer {
             }
         }//if the
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER)||fileData.get(lineNumber).
-                toUpperCase().equals(FILTER)){
+                toUpperCase().equals(FILTER_HEADLINE)){
             throw new  TypeTwoExceptions.BadFilterSectionName();
         }else {
             throw new TypeTwoExceptions.BadOrderSectionName();
@@ -125,11 +117,14 @@ public class FileAnalyzer {
         boolean isSortHeadLine=false;
         boolean isSortValue=false;
         for (int i = 0; i <3; i++) {
+            if (lineNumber>=fileData.size()){
+                return fileData.size()-1;
+            }
             if (!isSortHeadLine&&fileData.get(lineNumber).equals(ORDER)){
                 isSortHeadLine=true;
                 lineNumber++;
             }else if (!fileData.get(lineNumber).equals(ORDER)){
-                if (fileData.get(lineNumber).equals(FILTER)){
+                if (fileData.get(lineNumber).equals(FILTER_HEADLINE)){
                     return lineNumber;
                 }else if (!isSortValue){
                     lineNumber++;
@@ -137,8 +132,9 @@ public class FileAnalyzer {
                 }
             }
         }
+
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER)||fileData.get(lineNumber).
-                toUpperCase().equals(FILTER)){
+                toUpperCase().equals(FILTER_HEADLINE)){
             throw new  TypeTwoExceptions.BadFilterSectionName();
         }else {
             throw new TypeTwoExceptions.BadOrderSectionName();
