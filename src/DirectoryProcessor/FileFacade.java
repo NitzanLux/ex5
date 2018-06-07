@@ -28,27 +28,41 @@ public class FileFacade  {
 
     /**
      * Returns the name of the file
-     * @return
+     * @return the name of the file
      */
     public String getName() {
         return file.getName();
     }
 
     /**
-     *
-     * @return
+     * Returns the length of the file
+     * @return the length of the file
      */
     public long length() {
         return file.length();
     }
 
+    /**
+     * Checks whether the path represents a valid file
+     * @return true if the file is a valid file, false otherwise
+     */
     public boolean isFile() {
         return file.isFile();
     }
+
+    /**
+     * Checks whether the path represents a valis directory
+     * @return true if the directory is valid, false otherwise
+     */
     public boolean isDirectory(){
         return file.isDirectory();
     }
 
+    /**
+     * Filters the files by the FileFilter
+     * @param fileFilter - The filter object to filter the files
+     * @return an array of filtered files
+     */
     public FileFacade[] listFiles(FileFilter fileFilter){
         File[] listFiles=file.listFiles(fileFilter);
         FileFacade[] listFilesFacade;
@@ -62,6 +76,10 @@ public class FileFacade  {
         return listFilesFacade;
     }
 
+    /**
+     * Returns the absolute path of the file
+     * @return - the absolute path of the file
+     */
     public String getAbsolutePath(){
         return file.getAbsolutePath();
     }
