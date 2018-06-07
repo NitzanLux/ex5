@@ -8,8 +8,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class CurrentSecession {
-    private static final String VALUES_SPERATOR = "#";
+    private static final String VALUES_SEPARATOR = "#";
     private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";
+    private static final String NOT_OPERATION_KEY_WORD = "NOT";
+    private static final String VALUE_SEPARATOR_KEY_WORD = "#";
+    private static final String NOT_UPHOLD_OPERATOR = "NO";
+    private static final String UPHOLD_OPERATOR = "YES";
     private static CurrentSecession instance=new CurrentSecession();
     private FileFacade pathName=null;
     private FileFilter currentFileFilter;
@@ -69,43 +73,43 @@ public class CurrentSecession {
       * @param filterKey the filter requst string.
      * @return FileFilter
      */
-    private FileFilter readFilterKey(String filterKey){
-        String[] values=filterKey.split("#");//todo megic number
-        String filterName=values[0];
+    private FileFilter readFilterKey(String filterKey) {
+        String[] values = filterKey.split(VALUE_SEPARATOR_KEY_WORD);
+        String filterName = values[0];
         //indicative variables( if varible does not exists then it is null).
-        Double firstDouble=null;
-        Double secondDouble=null;
-        Boolean filterParameterBoolean=null;
-        String stringToFilter=null;
-        int notOperationInclude=0;
-        boolean notOperation=false;
-        for (int i = 1; i <values.length ; i++) {
-            if (values.length-1==i) {
-                if (values[i].equals("NOT")) {//todo megic number.
+        Double firstDouble = null;
+        Double secondDouble = null;
+        Boolean filterParameterBoolean = null;
+        String stringToFilter = null;
+        int notOperationInclude = 0;
+        boolean notOperation = false;
+        for (int i = 1; i < values.length; i++) {
+            if (values.length - 1 == i) {
+                if (values[i].equals(NOT_OPERATION_KEY_WORD)) {
                     notOperation = true;
                     notOperationInclude++;
                     break;
                 }
             }
-            Double doubleValue= getDouble(values[i]);
-            if (doubleValue!=null){
-                if (firstDouble==null) {
+            Double doubleValue = getDouble(values[i]);
+            if (doubleValue != null && doubleValue >= 0) {//non negativ number
+                if (firstDouble == null) {
                     firstDouble = doubleValue;
-                }else if (secondDouble==null){
-                    secondDouble=doubleValue;
+                } else if (secondDouble == null) {
+                    secondDouble = doubleValue;
                 }
-            }else{
-                Boolean booleanValue=isBoolean(values[i]);
+            } else {
+                Boolean booleanValue = isBoolean(values[i]);
                 if (booleanValue != null) {
                     filterParameterBoolean = booleanValue;
-                }else {
+                } else {
                     stringToFilter = values[i];
                 }
             }
         }
-        return getFilter(values.length-notOperationInclude, filterName,firstDouble,secondDouble,
-                stringToFilter,filterParameterBoolean, notOperation);
-    }//todo make it shorter!.
+        return getFilter(values.length - notOperationInclude, filterName, firstDouble, secondDouble,
+                stringToFilter, filterParameterBoolean, notOperation);
+    }
 
     /*
      * this method return a filter by the veriabls that had been read from the filter string
@@ -144,9 +148,9 @@ public class CurrentSecession {
     * return true if the string is boolean yes and false if it is no, return null if the string isnt yes/no
      */
     private Boolean isBoolean(String stringToCheck){
-        if (stringToCheck.equals("NO")){//todo megic number
+        if (stringToCheck.equals(NOT_UPHOLD_OPERATOR)){
             return false;
-        }else if (stringToCheck.equals("YES")){//todo megic number
+        }else if (stringToCheck.equals(UPHOLD_OPERATOR)){
             return true;
         }
         return null;
@@ -173,7 +177,7 @@ public class CurrentSecession {
         }
     }
     private Comparator<FileFacade> readSortKey(String sorterKey){
-        String[] values=sorterKey.split(VALUES_SPERATOR);//todo megic number
+        String[] values=sorterKey.split(VALUES_SEPARATOR);
         if (values.length>2||values.length<1){
             return null;
         }

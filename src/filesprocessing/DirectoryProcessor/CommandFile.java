@@ -1,5 +1,4 @@
 package filesprocessing.DirectoryProcessor;
-import DirectoryProcessor.FileFacade;
 
 import java.io.*;
 import java.util.ArrayList;
