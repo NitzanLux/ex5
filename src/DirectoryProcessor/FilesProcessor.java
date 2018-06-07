@@ -1,6 +1,6 @@
 package DirectoryProcessor;
 
-import DirectoryProcessor.SecssionProcessor.CurrentSecssion;
+import DirectoryProcessor.SecssionProcessor.CurrentSecession;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class FilesProcessor {
         }
         else{
             ArrayList<String> commendFileData = commandFile.readFile();// saves the command file's data to an array list of Strings
-            CurrentSecssion.getInstance().setPath(path); // sets the path of the files
+            CurrentSecession.getInstance().setPath(path); // sets the path of the files
             FileAnalyzer.getInstance().analyzeStringList(commendFileData);
         }
     }

@@ -3,25 +3,24 @@ package DirectoryProcessor.SecssionProcessor;
 import DirectoryProcessor.FileFacade;
 
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class CurrentSecssion {
+public class CurrentSecession {
     private static final String VALUES_SPERATOR = "#";
     private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";
-    private static CurrentSecssion instance=new CurrentSecssion();
+    private static CurrentSecession instance=new CurrentSecession();
     private FileFacade pathName=null;
     private FileFilter currentFileFilter;
     private Comparator<FileFacade> currentSort;
-    private CurrentSecssion(){
+    private CurrentSecession(){
         setDefaultValus();
     }
     private void setDefaultValus(){
         currentSort= SortFactory.getInstance().getAbsComparator();
         currentFileFilter=FilterFactory.getInstance().getAllFilter();
     }
-    public static CurrentSecssion getInstance() {
+    public static CurrentSecession getInstance() {
         return instance;
     }
 

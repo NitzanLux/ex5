@@ -1,6 +1,6 @@
 package DirectoryProcessor;
 
-import DirectoryProcessor.SecssionProcessor.CurrentSecssion;
+import DirectoryProcessor.SecssionProcessor.CurrentSecession;
 import DirectoryProcessor.SecssionProcessor.SecessionCreationException;
 
 import java.util.ArrayList;
@@ -56,13 +56,13 @@ public class FileAnalyzer {
                 }
             }
             try {
-                CurrentSecssion.getInstance().setFilterAndSorter(filterValue, orderValue);
+                CurrentSecession.getInstance().setFilterAndSorter(filterValue, orderValue);
             } catch (SecessionCreationException.FilterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, filterLine);
             }catch (SecessionCreationException.SorterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, orderLine);
             }
-            String[] outPutData = CurrentSecssion.getInstance().getCurrentSessionOutput();
+            String[] outPutData = CurrentSecession.getInstance().getCurrentSessionOutput();
             printFiles(outPutData);
         }
     }
