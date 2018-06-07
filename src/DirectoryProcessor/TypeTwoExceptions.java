@@ -23,22 +23,18 @@ public abstract class TypeTwoExceptions extends Exception {
             super("Bad format");
         }
     }
-    public static abstract class IOExceptions extends TypeTwoExceptions{
-        IOExceptions(String msg) {
-            super(msg);
-        }
-    }
-    public static class FileNotFoundException extends TypeTwoExceptions{
+
+    static class FileNotFoundException extends TypeTwoExceptions{
         FileNotFoundException(){
             super("file not found");
         }
     }
-    public static class IncorrentAmountOfArguments extends TypeTwoExceptions{
+    static class IncorrentAmountOfArguments extends TypeTwoExceptions{
         IncorrentAmountOfArguments(){
             super("Wrong usage. Should receive 2 arguments");
         }
     }
-    public static class NoFilesInSourceDir extends TypeTwoExceptions{
+    static class NoFilesInSourceDir extends TypeTwoExceptions{
         NoFilesInSourceDir(){
             super("No files in sourcedir");
         }
