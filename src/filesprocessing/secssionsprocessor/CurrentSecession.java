@@ -17,13 +17,9 @@ public class CurrentSecession {
     private static final String NOT_UPHOLD_OPERATOR = "NO";
     private static final String UPHOLD_OPERATOR = "YES";
     /*
-    * instance .
-     */
-    private static CurrentSecession instance=new CurrentSecession();
-    /*
     * the current path name.
      */
-    private FileFacade pathName=null;
+    private FileFacade path =null;
     /*
     * the current filter and sorter.
      */
@@ -32,7 +28,8 @@ public class CurrentSecession {
     /*
     * default constractor.
      */
-    private CurrentSecession(){
+    public CurrentSecession(FileFacade path){
+        this.path =path;
         setDefaultValus();
     }
     /*
@@ -43,20 +40,13 @@ public class CurrentSecession {
         currentFileFilter=FilterFactory.getInstance().getAllFilter();
     }
 
-    /**
-     * get instance
-     * @return singlton instance.
-     */
-    public static CurrentSecession getInstance() {
-        return instance;
-    }
 
     /**
      * set the currnt path name for extraction.
      * @param path the path name.
      */
     public void setPath(FileFacade path) {
-        this.pathName = path;
+        this.path = path;
     }
 
     /**
@@ -77,7 +67,7 @@ public class CurrentSecession {
      * @return orderd array of files names.
      */
     public String[] getCurrentSessionOutput(){
-        FileFacade[] files=pathName.listFiles(currentFileFilter);
+        FileFacade[] files= path.listFiles(currentFileFilter);
         Arrays.sort(files,currentSort);
         String[] secessionFilesOutputNames=new String[files.length];
         for (int i = 0; i <files.length ; i++) {

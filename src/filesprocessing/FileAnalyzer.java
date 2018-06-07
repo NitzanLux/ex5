@@ -12,12 +12,6 @@ import java.lang.*;
  *
  */
 class FileAnalyzer {
-    private static FileAnalyzer instance=new FileAnalyzer();
-    private FileAnalyzer(){}
-    static FileAnalyzer getInstance() {
-        return instance;
-    }
-
     /*--constants--*/
     private static final String FILTER_HEADLINE = "FILTER";
     private static final String ORDER  = "ORDER";
@@ -25,6 +19,11 @@ class FileAnalyzer {
     private static final int JUMP_TO_ORDER = 2;
     private static final String DEFAULT_SORTER = "abs";
 
+    private CurrentSecession currentSecession;
+
+    FileAnalyzer(CurrentSecession currentSecession){
+        this.currentSecession=currentSecession;
+    }
     /* This method goes through the array list that contains the file data, First,
     * it looks for type 2 exceptions, if found,
     * it throws exceptions. If there are no type 2 exceptions, it goes over the file, and for each section
@@ -56,13 +55,13 @@ class FileAnalyzer {
                 }
             }
             try {
-                CurrentSecession.getInstance().setFilterAndSorter(filterValue, orderValue);
+                currentSecession.setFilterAndSorter(filterValue, orderValue);
             } catch (SecessionCreationException.FilterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, filterLine);
             }catch (SecessionCreationException.SorterCreationException e) {
                 System.err.printf(TYPE_I_ERROR_MSG_STR_FORMAT, orderLine);
             }
-            String[] outPutData = CurrentSecession.getInstance().getCurrentSessionOutput();
+            String[] outPutData = currentSecession.getCurrentSessionOutput();
             printFiles(outPutData);
         }
     }
