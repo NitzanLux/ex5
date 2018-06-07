@@ -1,0 +1,50 @@
+nlux
+
+liorait
+
+
+=============================
+=      File description     =
+=============================
+
+FilesProcessor.java - The main class. This class receives two arguments: the directory of the files to sort and filter, and the command file.
+FileFacade.java - a facade for the File class, contains basic operations that are performed on files, for example isFile(), getName() etc.
+FileAnalyzer.java - This class is used to analyze the file's data. It gets an ArrayList of strings, checks errors, and then sends the filter and order value
+in each section to the CurrentSection class.
+CommandFile.java - represents a CommandFile, which is a type of File. Extends FileFacade.java.
+TypeTwoExceptions.java - This class includes nested classes of the possible type two errors. Extends Exception.java class.
+CurrentSecssion.java -
+FilterFactory.java - Holds all possible types of filter, and implements the filter method according to each filter type, returns an FileFilter instance
+SecessionCreationException.java - This class includes nested classes of the possible Filter/Sorter creation errors. Extends Exception.java.
+SortFactory.java - Holds all possible types of sorter, implements the sorting methods.
+
+=============================
+=          Design           =
+=============================
+The design is as following: In the SectionProcessor package are the following java classes: CurrentSecssion, FilterFactory, SecessionCreationException,
+SortFactory.
+The FilterFactory and SortFactory uses enum because it saves constants values and it doesn't change when the program is running.
+It is also very simple to add a new filter/order type - we simply add it to the enum, and no more work is needed. That's why it uses the Single
+Choice principle. The methodology of FilterFactory and SortFactory are equal, only that the FilterFactory has more parameters to filter.
+Exceptions - there are two basic classes of Exceptions, one for type 1 exceptions and the other one for type 2 exceptions.
+The SecssionCreationException is not private and that's
+
+
+
+=============================
+=  Implementation details   =
+=============================
+In the Game class, in order to store the different players, I chose the TreeSet dataset because we perform many
+ insertion and deletion actions on this dataset, actions which a balanced tree performs efficiently.
+
+
+=============================
+=    Answers to questions   =
+=============================
+
+1)
+The smart player picks his moves by simply looking at all the possible valid moves, and picking the
+one that leaves the opponent with the minimal number of possible steps (and which does not make him lose)
+
+2)
+On the given example, the run time of the TresSet took 0.3445 seconds, While the run time of the HashSet took 0.56547.
