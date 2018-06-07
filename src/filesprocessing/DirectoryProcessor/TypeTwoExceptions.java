@@ -23,11 +23,7 @@ public abstract class TypeTwoExceptions extends Exception {
             super("Bad format");
         }
     }
-    public static abstract class IOExceptions extends TypeTwoExceptions{
-        IOExceptions(String msg) {
-            super(msg);
-        }
-    }
+
     static class FileNotFoundException extends TypeTwoExceptions{
         FileNotFoundException(){
             super("file not found");

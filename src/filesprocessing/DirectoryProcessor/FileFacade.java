@@ -7,6 +7,7 @@ import java.io.FileFilter;
  */
 public class FileFacade  {
 
+    private static final int NO_DOT_IN_FILE = -1;
     private File file;
 
     /**
@@ -17,18 +18,26 @@ public class FileFacade  {
         file=new File(s);
     }
 
-    /**
-     * 
-     * @param file
+    /*
+     * creates a new FileFacade instance by a File object that it gets
+     * a private method that is used only in this class.
      */
     private FileFacade(File file){
         this.file=file;
     }
 
+    /**
+     * Returns the name of the file
+     * @return
+     */
     public String getName() {
         return file.getName();
     }
 
+    /**
+     *
+     * @return
+     */
     public long length() {
         return file.length();
     }
@@ -65,11 +74,9 @@ public class FileFacade  {
        String fileType=null;
         int lastDot=file.getName().lastIndexOf(".");//todo megic number
         String fileName=file.getName();
-        if (lastDot!=-1){//todo megic number
+        if (lastDot!= NO_DOT_IN_FILE){
         fileType=fileName.substring(++lastDot);//TODO megic number
        }
         return fileType;
     }
-
-
 }
