@@ -15,13 +15,6 @@ public class FileFacade  {
     private FileFacade(File file){
         this.file=file;
     }
-    public boolean canWrite() {
-        return file.canWrite();
-    }
-
-    public boolean isHidden() {
-        return file.isHidden();
-    }
 
     public String getName() {
         return file.getName();
@@ -48,9 +41,7 @@ public class FileFacade  {
             }
         return listFilesFacade;
     }
-    public boolean canExecute(){
-        return file.canExecute();
-    }
+
     public String getAbsolutePath(){
         return file.getAbsolutePath();
     }

@@ -4,37 +4,61 @@ import java.io.File;
 import java.io.FileFilter;
 
 /*
- * singlton of filterFactory, genrate an FileFilter for sorting file.
+ * singleton of filterFactory, generate an FileFilter for sorting file.
  */
-public class FilterFactory {
+class FilterFactory {
+    /* constants*/
+    private static final String ALL_FILTER_KEY_WORD = "all";
+    /*
+    * instance.
+     */
     private static FilterFactory instance = new FilterFactory();
 
+    /*
+    * instance private constructor.
+     */
     private FilterFactory() {
     }
 
+    /*
+     * @return factory instance
+     */
     static FilterFactory getInstance() {
         return instance;
     }
 
-    private enum MathComperison {
+    /*
+    * enum which its values check filter using a single double argument.
+     */
+    private enum MathComparison {
         GREATER_THAN() {
-            boolean filterd(double fileSize, double threshold) {
+            boolean filter(double fileSize, double threshold) {
                 return fileSize > threshold;
             }
         },
         SMALLER_THAN() {
-            boolean filterd(double fileSize, double threshold) {
+            boolean filter(double fileSize, double threshold) {
                 return fileSize < threshold;
             }
         };
+        /*--constants--*/
+        private static final int BYTE_IT_KB = 1024;
 
-        abstract boolean filterd(double fileSize, double threshold);
+        /*
+         * abstract methode which determine the filter behavior.
+         */
+        abstract boolean filter(double fileSize, double threshold);
 
-        boolean isFilterd(File file, double threshold) {
-            return filterd(file.length()/1024, threshold);
+        /*
+         * cheack a file and a threshold and
+         */
+        boolean isFiltered(File file, double threshold) {
+            return filter(file.length() / BYTE_IT_KB, threshold);
         }
+
         /**
          * override the enum metod return the enum name with lowercase.
+         *
          * @return enum name with lower case .
          */
         @Override
@@ -43,33 +67,83 @@ public class FilterFactory {
         }
 
     }
+    /*
+    * enum which its values check filter using a two double argument.
+     */
+    private enum TwoFactorMathComparison {
+        BETWEEN() {
+            boolean isFiltered(File file, double maxBar, double minBar) {
+                return MathComparison.GREATER_THAN.isFiltered(file, minBar) &&
+                        MathComparison.SMALLER_THAN.isFiltered(file, maxBar);
+            }
+        };
+        /*
+         * abstract method which determine the filter behavior.
+         */
+        abstract boolean isFiltered(File file, double maxBar, double minBar);
 
+        /**
+         * override the enum metod return the enum name with lowercase.
+         *
+         * @return enum name with lower case .
+         */
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+    }
+    /*
+    * enum which its values check filter without parameters
+     */
+    private enum NonFactorComparison {
+        ALL() {
+            boolean isFiltered(File file) {
+                return true;
+            }
+        };
 
-    private enum NameComperison {
+        abstract boolean isFiltered(File file);
+
+        /**
+         * override the enum metod return the enum name with lowercase.
+         *
+         * @return enum name with lower case .
+         */
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+    }
+    /*
+     * enum which its values check filter with string parameter.
+     */
+    private enum NameComparison {
         FILE() {
-            boolean isFilterd(File file, String parameter) {
+            boolean isFiltered(File file, String parameter) {
                 return file.getName().equals(parameter);
             }
         },
         CONTAINS() {
-            boolean isFilterd(File file, String parameter) {
+            boolean isFiltered(File file, String parameter) {
                 return file.getName().contains(parameter);
             }
         },
         PREFIX() {
-            boolean isFilterd(File file, String parameter) {
-                return prefixEquals(file, parameter, true);
+            boolean isFiltered(File file, String parameter) {
+                return file.getName().startsWith(parameter);
             }
         },
         SUFFIX() {
-            boolean isFilterd(File file, String parameter) {
-                return prefixEquals(file, parameter, false);
+            boolean isFiltered(File file, String parameter) {
+                return file.getName().endsWith(parameter);
             }
         };
 
-        abstract boolean isFilterd(File file, String parameter);
+        abstract boolean isFiltered(File file, String parameter);
+
         /**
          * override the enum metod return the enum name with lowercase.
+         *
          * @return enum name with lower case .
          */
         @Override
@@ -77,46 +151,32 @@ public class FilterFactory {
             return super.toString().toLowerCase();
         }
 
-        static private boolean prefixEquals(File file, String parameter, boolean fromStart) {
-            String fileName = file.getName();
-            if (!fromStart) {
-                fileName = reversString(fileName);
-                parameter = reversString(parameter);
-            }
-            for (int i = 0; i < parameter.length(); i++) {
-                if (parameter.charAt(i) != fileName.charAt(i)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        static private String reversString(String value) {
-            StringBuilder stringBuilder = new StringBuilder(value);
-            return stringBuilder.reverse().toString();
-        }
     }
-
-    private enum FileStateComperison {
+    /*
+     * enum which its values check filter with boolean parameter.
+     */
+    private enum FileStateComparison {
         WRITABLE() {
-            boolean isFilterd(File file) {
+            boolean isFiltered(File file) {
                 return file.canWrite();
             }
         },
         EXECUTABLE() {
-            boolean isFilterd(File file) {
+            boolean isFiltered(File file) {
                 return file.canExecute();
             }
         },
         HIDDEN() {
-            boolean isFilterd(File file) {
+            boolean isFiltered(File file) {
                 return file.isHidden();
             }
         };
 
-        abstract boolean isFilterd(File file);
+        abstract boolean isFiltered(File file);
+
         /**
          * override the enum metod return the enum name with lowercase.
+         *
          * @return enum name with lower case .
          */
         @Override
@@ -130,11 +190,13 @@ public class FilterFactory {
      * get filter using a threshold.
      * @param filterName name of the filter.
      * @param threshold the threshold.
+     * @param isNot if not parameter has been insert.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, double threshold,boolean isNot) {
-        MathComperison mathFilter = null;
-        for (MathComperison filter : MathComperison.values()) {
+    FileFilter getFilter(String filterName, double threshold, boolean isNot) {
+        MathComparison mathFilter = null;
+        //search the value in the proper enum
+        for (MathComparison filter : MathComparison.values()) {
             if (filterName.equals(filter.toString())) {
                 mathFilter = filter;
             }
@@ -142,106 +204,108 @@ public class FilterFactory {
         if (mathFilter == null) {
             return null;
         } else {
-            final MathComperison mathComperisonFilter = mathFilter;
-            return new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return mathComperisonFilter.isFilterd(pathname, threshold)!=isNot;
-                }
-            };
+            final MathComparison mathComparisonFilter = mathFilter;
+            return file -> mathComparisonFilter.isFiltered(file, threshold) != isNot && file.isFile();
         }
-    }//todo lambda
+    }
 
     /*
      * get filter from between filter.
      * @param filterName name of the filter.
-     * @param threshold the max threshold.
-     * @param minBar the minimum threshold.
+     * @param maxBar the max maxBar.
+     * @param minBar the minimum maxBar.
+     * @param isNot if not parameter has been insert.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, double threshold, double minBar,boolean isNot) {
-        if (!filterName.equals("between")||minBar>threshold) {
+    FileFilter getFilter(String filterName, double maxBar, double minBar, boolean isNot) {
+        TwoFactorMathComparison twoFactorMathComparison = null;
+        //search the value in the proper enum
+        for (TwoFactorMathComparison filter : TwoFactorMathComparison.values()) {
+            if (filterName.equals(filter.toString())) {
+                twoFactorMathComparison = filter;
+            }
+        }
+        if (twoFactorMathComparison == null || maxBar <= minBar) {
             return null;
         }
-        return new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return (MathComperison.GREATER_THAN.isFilterd(pathname, minBar) &&
-                        MathComperison.SMALLER_THAN.isFilterd(pathname, threshold))!=isNot;
-            }
-        };
-    }//todo megic number lambda
+        final TwoFactorMathComparison currentFactor = twoFactorMathComparison;
+        return file -> (MathComparison.GREATER_THAN.isFiltered(file, minBar) &&
+                currentFactor.isFiltered(file, maxBar, minBar)) != isNot && file.isFile();
+    }
 
     /*
      * get filter using search key .
      * @param filterName the filter name.
      * @param searchValue a String key for searching in the file name.
+     * @param isNot if not parameter has been insert.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, String searchValue,boolean isNot) {
-        NameComperison nameComperisonFilter=null;
-        for (NameComperison currentValue:NameComperison.values()){
-            if (filterName.equals(currentValue.toString())){
-                nameComperisonFilter=currentValue;
+    FileFilter getFilter(String filterName, String searchValue, boolean isNot) {
+        NameComparison nameComparisonFilter = null;
+        //search the value in the proper enum
+        for (NameComparison currentValue : NameComparison.values()) {
+            if (filterName.equals(currentValue.toString())) {
+                nameComparisonFilter = currentValue;
             }
         }
-        if (nameComperisonFilter==null){
+        if (nameComparisonFilter == null) {
             return null;
-        }else {
-            final NameComperison nameComperison = nameComperisonFilter;
-            return new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return nameComperison.isFilterd(pathname,searchValue)!=isNot;
-                }
-            };
+        } else {
+            final NameComparison nameComparison = nameComparisonFilter;
+            return file -> nameComparison.isFiltered(file, searchValue) != isNot && file.isFile();
         }
-    }//todo lambda
+    }
 
     /*
      * get filter based on file State.
      * @param filterName the filter name.
-     * @param isUphold is the uphold the current demend.
+     * @param isUphold is the uphold the current demand.
+     * @param isNot if not parameter has been insert.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName, boolean isUphold,boolean isNot){
-        FileStateComperison fileStateComperisonFilter=null;
-        for (FileStateComperison currntFilter:FileStateComperison.values()) {
-            if (filterName.equals(currntFilter.toString())){
-                fileStateComperisonFilter=currntFilter;
+    FileFilter getFilter(String filterName, boolean isUphold, boolean isNot) {
+        FileStateComparison fileStateComparisonFilter = null;
+        //search the value in the proper enum
+        for (FileStateComparison currantFilter : FileStateComparison.values()) {
+            if (filterName.equals(currantFilter.toString())) {
+                fileStateComparisonFilter = currantFilter;
             }
         }
-        if (fileStateComperisonFilter==null){
+        if (fileStateComparisonFilter == null) {
             return null;
-        }else {
-            final FileStateComperison fileStateComperison=fileStateComperisonFilter;
-            return new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    boolean answe = fileStateComperison.isFilterd(pathname);
-                    return answe==isUphold&& answe!=isNot;
-                }
+        } else {
+            final FileStateComparison fileStateComparison = fileStateComparisonFilter;
+            return file -> {
+                boolean answer = fileStateComparison.isFiltered(file);
+                return answer == isUphold && answer != isNot && file.isFile();
             };
         }
     }
 
     /*
-     *get filter based on none critiryon (all filter).
+     *get filter based on none criterion (all filter).
      * @param filterName the filter name.
+     * @param isNot if not parameter has been insert.
      * @return FileFilter instance.
      */
-    FileFilter getFilter(String filterName,boolean isNot){
-        if (filterName.equals("all")) {//todo megic num
-            return new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {//todo lambda
-                    return !isNot;
-                }
-            } ;
+    FileFilter getFilter(String filterName, boolean isNot) {
+        NonFactorComparison nonFactorComparison = null;
+        //search the value in the proper enum
+        for (NonFactorComparison currantFilter : NonFactorComparison.values()) {
+            if (filterName.equals(currantFilter.toString())) {
+                nonFactorComparison = currantFilter;
             }
+        }
+        if (nonFactorComparison == null) {
             return null;
         }
-    public FileFilter getAllFilter(){
-        return getFilter("all",false);//todo megic numb
+        final NonFactorComparison currentFilter = nonFactorComparison;
+        return file -> currentFilter.isFiltered(file) != isNot && file.isFile();
+    }
+    /*
+     * get the "all" filter.
+     */
+    FileFilter getAllFilter() {
+        return getFilter(ALL_FILTER_KEY_WORD, false);
     }
 }

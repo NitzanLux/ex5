@@ -3,17 +3,23 @@ package DirectoryProcessor.SecssionProcessor;
 import DirectoryProcessor.FileFacade;
 
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class CurrentSecssion {
+    private static final String VALUES_SPERATOR = "#";
+    private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";
     private static CurrentSecssion instance=new CurrentSecssion();
     private FileFacade pathName=null;
     private FileFilter currentFileFilter;
     private Comparator<FileFacade> currentSort;
     private CurrentSecssion(){
-        currentSort =null;
-        currentFileFilter=null;
+        setDefaultValus();
+    }
+    private void setDefaultValus(){
+        currentSort= SortFactory.getInstance().getAbsComparator();
+        currentFileFilter=FilterFactory.getInstance().getAllFilter();
     }
     public static CurrentSecssion getInstance() {
         return instance;
@@ -27,36 +33,33 @@ public class CurrentSecssion {
         this.pathName = new FileFacade(pathName);
     }
 
-    /**
-     * get currnt Session list of files.
-     * @param filterName the filter key name.
-     * @param orderName the order key name.
-     * @return orderd array of files names.
-     * @throws SecssionCreationException.FilterCreationException cannot create filter set filter to default.
-     * @throws SecssionCreationException.SorterCreationException cannot create sorter set sorter to default.
-     */
-    public String[] getCurrentSessionOutput(String filterName,String orderName)
-            throws SecssionCreationException.FilterCreationException,
-            SecssionCreationException.SorterCreationException {
+    public void setFilterAndSorter(String filterName,String orderName) throws
+            SecessionCreationException.SorterCreationException,
+            SecessionCreationException.FilterCreationException {
         setFileFilter(filterName);
         setSorter(orderName);
+    }
+    /**
+     * get currnt Session list of files.
+     * @return orderd array of files names.
+     */
+    public String[] getCurrentSessionOutput(){
         FileFacade[] files=pathName.listFiles(currentFileFilter);
         Arrays.sort(files,currentSort);
-        String[] secssionFilesOutputNames=new String[files.length];
+        String[] secessionFilesOutputNames=new String[files.length];
         for (int i = 0; i <files.length ; i++) {
-            secssionFilesOutputNames[i]=files[i].getName();
+            secessionFilesOutputNames[i]=files[i].getName();
         }
-        currentFileFilter=null;
-        currentSort=null;
-        return secssionFilesOutputNames;
+        setDefaultValus();
+        return secessionFilesOutputNames;
+
     }
 
-    private void setFileFilter(String filterKey) throws SecssionCreationException.FilterCreationException {
+    private void setFileFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
         FileFilter currentFileFilter = readFilterKey(filterKey);
         if (currentFileFilter == null){
-            this.currentFileFilter=FilterFactory.getInstance().getAllFilter();
-            throw new SecssionCreationException.FilterCreationException();
-            }else {
+            throw new SecessionCreationException.FilterCreationException();
+        }else {
                 this.currentFileFilter=currentFileFilter;
             }
         }
@@ -72,28 +75,36 @@ public class CurrentSecssion {
         //indicative variables( if varible does not exists then it is null).
         Double firstDouble=null;
         Double secondDouble=null;
-        Boolean firstBoolean=null;
+        Boolean filterParameterBoolean=null;
         String stringToFilter=null;
         int notOperationInclude=0;
         boolean notOperation=false;
         for (int i = 1; i <values.length ; i++) {
-            if (isDouble(values[i])){
-                if (firstDouble==null){
-                    firstDouble=Double.parseDouble(values[i]);
-                }else {
-                    secondDouble=Double.parseDouble(values[i]);
+            if (values.length-1==i) {
+                if (values[i].equals("NOT")) {//todo megic number.
+                    notOperation = true;
+                    notOperationInclude++;
+                    break;
                 }
-            }else if (isBoolean(values[i])!=null){
-                firstBoolean=isBoolean(values[i]);
-            }else if (values[i].equals("NOT")&&!notOperation){//todo megic number.
-                notOperation=true;
-                notOperationInclude++;
-            }else {
-                stringToFilter=values[i];
+            }
+            Double doubleValue= getDouble(values[i]);
+            if (doubleValue!=null){
+                if (firstDouble==null) {
+                    firstDouble = doubleValue;
+                }else if (secondDouble==null){
+                    secondDouble=doubleValue;
+                }
+            }else{
+                Boolean booleanValue=isBoolean(values[i]);
+                if (booleanValue != null) {
+                    filterParameterBoolean = booleanValue;
+                }else {
+                    stringToFilter = values[i];
+                }
             }
         }
         return getFilter(values.length-notOperationInclude, filterName,firstDouble,secondDouble,
-                stringToFilter,firstBoolean, notOperation);
+                stringToFilter,filterParameterBoolean, notOperation);
     }//todo make it shorter!.
 
     /*
@@ -124,6 +135,8 @@ public class CurrentSecssion {
                 if (firstDouble!=null&&secondDouble!=null){
                     return FilterFactory.getInstance().getFilter(filterName,secondDouble,firstDouble,notOperation);
                 }
+            default:
+                break;
         }
         return null;
     }
@@ -142,44 +155,37 @@ public class CurrentSecssion {
     /*
      * determine if the corrnt string is double.
      * @param stringToCheck
-     * @return true if it can be pars into double.
+     * @return double value if the string is a double , null otherwise.
      */
-    private boolean isDouble(String stringToCheck){
-        boolean isDotExists=false;
-        for (int i = 0; i <stringToCheck.length(); i++) {
-            int asciiOfChar=(int)stringToCheck.charAt(i);
-            if (!((asciiOfChar<=57&&asciiOfChar>=48)||(asciiOfChar==46&&!isDotExists&&i!=0 && i!=(stringToCheck.length()-1)))){//todo megic number
-                return false;
-            }
-            if (asciiOfChar==46){//todo megic number
-                isDotExists=true;
-            }
+    private Double getDouble(String stringToCheck){
+        try {
+            return Double.parseDouble(stringToCheck);
+        } catch (NumberFormatException e) {
+            return null;
         }
-        return true;
     }
-    private void setSorter(String sorterKey) throws SecssionCreationException.SorterCreationException {
+    private void setSorter(String sorterKey) throws SecessionCreationException.SorterCreationException {
         Comparator<FileFacade> comparator=readSortKey(sorterKey);
         if (comparator==null){
-            currentSort= SortFactory.getInstance().getAbsComperator();
-            throw new SecssionCreationException.SorterCreationException();
+            throw new SecessionCreationException.SorterCreationException();
         }else {
             currentSort=comparator;
         }
     }
     private Comparator<FileFacade> readSortKey(String sorterKey){
-        String[] values=sorterKey.split("#");//todo megic number
+        String[] values=sorterKey.split(VALUES_SPERATOR);//todo megic number
         if (values.length>2||values.length<1){
             return null;
         }
         boolean isRevers= false;
         String sorterName=values[0];
         if (values.length==2){
-            if(!values[1].equals("REVERSE")){
+            if(!values[1].equals(REVERSE_SORT_KEY_VALUE)){
                 return null;
             }else {
                 isRevers=true;
             }
         }
-        return SortFactory.getInstance().getComperator(sorterName,isRevers);
+        return SortFactory.getInstance().getComparator(sorterName,isRevers);
     }
 }

@@ -1,20 +1,28 @@
 package DirectoryProcessor.SecssionProcessor;
 
 import DirectoryProcessor.FileFacade;
-
 import java.util.Comparator;
 
+/*
+ * an singleton class which generate FileFilter according to the given parameters.
+ */
 class SortFactory {
+    /*--class singleton instance--*/
     private static SortFactory instance = new SortFactory();
-
+    /*
+     * private default constructor.
+     */
     private SortFactory() {
     }
+    /*
+    * return the class single instance.
+     */
     static SortFactory getInstance() {
         return instance;
     }
     /*
-        *  enum of all kind of sort.
-         */
+     *  enum of all kind of sort.
+     */
     private enum Sort {
         ABS() {
             int compareIt(FileFacade currentFile, FileFacade fileToComper) {
@@ -24,7 +32,7 @@ class SortFactory {
         TYPE() {
             int compareIt(FileFacade currentFile, FileFacade fileToComper) {
                 int toReturn= currentFile.getType().compareTo(currentFile.getType());
-                if (toReturn==0) {//todo megic number
+                if (toReturn== EQUAL_FACTOR) {
                     toReturn=ABS.compareIt(currentFile,fileToComper);
                 }
                     return toReturn;
@@ -32,15 +40,18 @@ class SortFactory {
         },
         SIZE() {
             int compareIt(FileFacade currentFile, FileFacade fileToComper) {
-                int toReturn=(int) Math.signum(currentFile.length() - fileToComper.length());
-                if (toReturn==0) {//todo megic number
+                int toReturn=Double.compare(currentFile.length(),fileToComper.length());
+                if (toReturn==EQUAL_FACTOR) {
                     toReturn=ABS.compareIt(currentFile,fileToComper);
                 }
                 return toReturn;
             }
         };
+        /*--constant--*/
+        private static final int EQUAL_FACTOR = 0;
+
         /*
-        * abstract method for compering 2 files the fires one is the current file and the outher one is the one to compere with
+         * abstract method for compering 2 files the fires one is the current file and the outher one is the one to compere with
          */
         abstract int compareIt(FileFacade currentFile, FileFacade fileToComper);
 
@@ -55,36 +66,35 @@ class SortFactory {
     }
 
     /*
-     * genrate comperator object.
+     * generate comparator object.
      * @param sortName the name of the sort operation.
      * @param isReversed is the sort operation is reversed.
-     * @return comparator for the designed propertis.
+     * @return comparator for the designed properties.
      */
-    Comparator<FileFacade> getComperator(String sortName, boolean isReversed) {
-        int reversFactor = 1;//todo megic number
+    Comparator<FileFacade> getComparator(String sortName, boolean isReversed) {
+        int reversFactor = 1;
         if (isReversed) {
-            reversFactor = -1;//todo megic number
+            reversFactor = -reversFactor;
         }
-        Sort currntSorter = null;
+        Sort currantSorter = null;
+        //search the value in the proper enum
         for (Sort sort : Sort.values()) {
             if (sortName.equals(sort.toString())) {
-                currntSorter = sort;
+                currantSorter = sort;
             }
         }
-        if (currntSorter == null) {
+        if (currantSorter == null) {
             return null;
         }
-        final Sort sorter = currntSorter;
+        final Sort sorter = currantSorter;
         final int revers = reversFactor;
-        return new Comparator<FileFacade>() {
-            @Override
-            public int compare(FileFacade fileFacade, FileFacade t1) {
-                return sorter.compareIt(fileFacade, t1) * revers;
-            }
-        };
+        return (fileFacade, t1) -> sorter.compareIt(fileFacade, t1) * revers;
     }
-    Comparator<FileFacade> getAbsComperator(){
-        return getComperator(Sort.ABS.toString(),true);
+    /*
+     * get the "abs" comparator
+     */
+    Comparator<FileFacade> getAbsComparator(){
+        return getComparator(Sort.ABS.toString(),true);
     }
 }
 

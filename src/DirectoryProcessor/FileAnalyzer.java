@@ -1,25 +1,20 @@
 package DirectoryProcessor;
 
 import DirectoryProcessor.SecssionProcessor.CurrentSecssion;
-import DirectoryProcessor.SecssionProcessor.SecssionCreationException;
-import sun.print.CUPSPrinter;
+import DirectoryProcessor.SecssionProcessor.SecessionCreationException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.*;
-import static java.lang.System.*;
 
 /**
  *
  */
 public class FileAnalyzer {
 
-    final static String FILTER = "FILTER";
-    final static String ORDER  = "ORDER";
-    final int INCREASE_ONE = 1;
-    final int INCREASE_TWO = 2;
+    private final static String FILTER = "FILTER";
+    private final static String ORDER  = "ORDER";
+    private final int INCREASE_TWO = 2;
     private static final String ABS_KEY_WORD = "abs";
-    private static final String EMPTY_STRING = "";
 
     // This method goes through the array list that contains the file data, Firstable, it looks for type 2 exceptions, if found,
     // it throws exceptions. If there are no type 2 exceptions, it goes over the file, and for each section it filters and orders the files
@@ -36,7 +31,7 @@ public class FileAnalyzer {
             line = fileData.get(i);
             // Checks if the current line equals FILTER, if yes, will save the filter value
             if (line.compareTo(FILTER) == 0) {
-                nextLine = fileData.get(i + INCREASE_ONE);
+                nextLine = fileData.get(i +1);
                 filterValue = nextLine;
                 i += INCREASE_TWO;
                 line = fileData.get(i);
@@ -46,10 +41,10 @@ public class FileAnalyzer {
                 //if (fileData.get(i + INCREASE_ONE) != null) {
                 int j = i+1;
                 if(j < fileData.size()){
-                    nextLine = fileData.get(i + INCREASE_ONE);
+                    nextLine = fileData.get(i + 1);
                     if (nextLine.compareTo(FILTER) == 0) {
                         orderValue = ABS_KEY_WORD;
-                        i += INCREASE_ONE;
+                        i ++;
                     } else {
                         orderValue = nextLine;
                         i += INCREASE_TWO;
@@ -62,13 +57,14 @@ public class FileAnalyzer {
             System.out.println("current: " + i + filterValue + " " + orderValue);
 
             try {
-                String[] filesToPrint = CurrentSecssion.getInstance().getCurrentSessionOutput(filterValue, orderValue);
-                printFiles(filesToPrint);
-            } catch (SecssionCreationException.FilterCreationException e) {
+                CurrentSecssion.getInstance().setFilterAndSorter(filterValue, orderValue);
+            } catch (SecessionCreationException.FilterCreationException e) {
                 //todo somsthing
-            }catch (SecssionCreationException.SorterCreationException e) {
+            }catch (SecessionCreationException.SorterCreationException e) {
                 // todo something
             }
+            //String[] filesToPrint = CurrentSecssion.getInstance().getCurrentSessionOutput();
+          //  printFiles(filesToPrint);
             //out.printf("the index is now: %d filterValue: %s orderValue: %s%n", i, filterValue, orderValue);
         } // end of for loop
     }
@@ -81,11 +77,11 @@ public class FileAnalyzer {
     }
 
 
-     void checkTypeTwoErrors(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
+     private void checkTypeTwoErrors(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
                                                                 TypeTwoExceptions.BadOrderSectionName {
-            String line = EMPTY_STRING;
-            String filterValue = EMPTY_STRING;
-            String orderValue  = EMPTY_STRING;
+            String line ="";
+            String filterValue = "";
+            String orderValue  = "";
 
             // This loop iterates through the array, for each section checks if in the section exists type 2 errors
             for (int i = 0; i < fileData.size(); i++) {
@@ -104,7 +100,7 @@ public class FileAnalyzer {
               //      } else {
               //          orderValue = line;
                //         i += INCREASE_TWO;
-               //     }
+               //     }todo ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooowhata to do
                 //}
             } // end of for loop
      } // end of checkTypeTwoErrors method
@@ -113,8 +109,8 @@ public class FileAnalyzer {
 
 
     private int checKFilter(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadFilterSectionName {
-        String line     = EMPTY_STRING;
-        String nextLine = EMPTY_STRING;
+        String line     = "";
+        String nextLine = "";
 
         if (fileData.get(lineNumber) != null) {
             line = fileData.get(lineNumber);
@@ -138,8 +134,8 @@ public class FileAnalyzer {
     } // end of checkFilter method
 
     private int checkOrder(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadOrderSectionName {
-        String line     = EMPTY_STRING;
-        String nextLine = EMPTY_STRING;
+        String line     = "";
+        String nextLine = "";
 
         if (fileData.get(lineNumber) != null) {
             line = fileData.get(lineNumber);
