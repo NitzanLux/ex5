@@ -27,7 +27,9 @@ public class FileFacade  {
     public boolean isFile() {
         return file.isFile();
     }
-
+    public boolean isDirectory(){
+        return file.isDirectory();
+    }
 
     public FileFacade[] listFiles(FileFilter fileFilter){
         File[] listFiles=file.listFiles(fileFilter);

@@ -27,10 +27,10 @@ public class CurrentSecssion {
 
     /**
      * set the currnt path name for extraction.
-     * @param pathName the path name.
+     * @param path the path name.
      */
-    public void setPathName(String pathName) {
-        this.pathName = new FileFacade(pathName);
+    public void setPath(FileFacade path) {
+        this.pathName = path;
     }
 
     public void setFilterAndSorter(String filterName,String orderName) throws

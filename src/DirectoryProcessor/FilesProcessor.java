@@ -11,21 +11,26 @@ import java.util.ArrayList;
 public class FilesProcessor {
 
     static final int MIN_NUM_OF_ARGUMENTS = 1;
+    private static final int PATH_NAME_POSITION = 0;
+    private static final int COMMAND_NAME_POSITION = 1;
 
     public static void main(String [] args) throws TypeTwoExceptions.BadFilterSectionName, TypeTwoExceptions.BadOrderSectionName,
                                                    TypeTwoExceptions.IncorrentAmountOfArguments,
                                                    TypeTwoExceptions.FileNotFoundException {
         checkArgs(args); // checks the validation of arguments, if valid, continues
-        String commendFileName = args[1];
+        String commendFileName = args[COMMAND_NAME_POSITION];
         CommandFile commandFile = new CommandFile(commendFileName); // creates a new instance of CommandFile
+        FileFacade path=new FileFacade(args[PATH_NAME_POSITION]);
         // Checks if the commend file is a valid file, if not, throws exception
         if (!(commandFile.isFile())){
             throw new TypeTwoExceptions.FileNotFoundException();
+        }else if (!(path.isDirectory())){
+            throw new TypeTwoExceptions.FileNotFoundException();//todo oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
         }
         else{
             ArrayList<String> commendFileData = new ArrayList<String>();
             commendFileData = commandFile.readFile(); // saves the command file's data to an array list of Strings
-            CurrentSecssion.getInstance().setPathName(args[0]); // sets the path of the files
+            CurrentSecssion.getInstance().setPath(path); // sets the path of the files
             FileAnalyzer fileAnalyzer = new FileAnalyzer();
             fileAnalyzer.analyzeStringList(commendFileData);
 

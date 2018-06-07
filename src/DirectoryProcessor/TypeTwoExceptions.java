@@ -2,8 +2,10 @@ package DirectoryProcessor;
 
 public abstract class TypeTwoExceptions extends Exception {
     private static final long serialVersionUID=1L;
+    private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s\n";
+
     TypeTwoExceptions(String msg){
-        super("ERROR: " + msg + "\n");
+        super(String.format(TYPE_2_ERROR_PREFIX, msg));
     }
 
     public static class BadFilterSectionName extends TypeTwoExceptions {
@@ -34,6 +36,11 @@ public abstract class TypeTwoExceptions extends Exception {
     public static class IncorrentAmountOfArguments extends TypeTwoExceptions{
         IncorrentAmountOfArguments(){
             super("Wrong usage. Should receive 2 arguments");
+        }
+    }
+    public static class NoFilesInSourceDir extends TypeTwoExceptions{
+        NoFilesInSourceDir(){
+            super("No files in sourcedir");
         }
     }
 
