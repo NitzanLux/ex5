@@ -3,12 +3,16 @@ import java.io.File;
 import java.io.FileFilter;
 
 /**
- * an abstract class whice is a facade of java.io.File.
+ * an abstract class which is a facade of java.io.File.
  */
 public class FileFacade  {
 
     private File file;
 
+    /**
+     *
+     * @param s - the path of the file to create
+     */
     public FileFacade(String s) {
         file=new File(s);
     }
