@@ -1,9 +1,10 @@
-package DirectoryProcessor;
+package filesprocessing;
 
 /**
  * The class represents
  */
 public abstract class TypeTwoExceptions extends Exception {
+abstract class TypeTwoExceptions extends Exception {
     private static final long serialVersionUID=1L;
     private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s\n";
     private static final String FILTER_SUB_SECTION_MISSING = "FILTER sub-section missing";
@@ -19,17 +20,17 @@ public abstract class TypeTwoExceptions extends Exception {
 
     static class BadFilterSectionName extends TypeTwoExceptions {
         BadFilterSectionName() {
-            super(FILTER_SUB_SECTION_MISSING); // todo magic
+            super(FILTER_SUB_SECTION_MISSING);
         }
     }
 
     static class BadOrderSectionName extends TypeTwoExceptions{
         BadOrderSectionName() {
-            super(ORDER_SUB_SECTION_MISSING); // todo magic
+            super(ORDER_SUB_SECTION_MISSING);
         }
     }
 
-    public static class BadFormatFile extends TypeTwoExceptions{
+    static class BadFormatFile extends TypeTwoExceptions{
         BadFormatFile(){
             super(BAD_FORMAT);
         }

@@ -1,4 +1,4 @@
-package DirectoryProcessor;
+package filesprocessing;
 import java.io.File;
 import java.io.FileFilter;
 
@@ -8,6 +8,7 @@ import java.io.FileFilter;
 public class FileFacade  {
 
     private static final int NO_DOT_IN_FILE = -1;
+    private static final String SUFFIX_INDICATORS = ".";
     private File file;
 
     /**
@@ -54,7 +55,7 @@ public class FileFacade  {
      * Checks whether the path represents a valis directory
      * @return true if the directory is valid, false otherwise
      */
-    public boolean isDirectory(){
+    boolean isDirectory(){
         return file.isDirectory();
     }
 
@@ -90,10 +91,10 @@ public class FileFacade  {
      */
     public String getType(){
        String fileType=null;
-        int lastDot=file.getName().lastIndexOf(".");//todo megic number
+        int lastDot=file.getName().lastIndexOf(SUFFIX_INDICATORS);
         String fileName=file.getName();
         if (lastDot!= NO_DOT_IN_FILE){
-        fileType=fileName.substring(++lastDot);//TODO megic number
+        fileType=fileName.substring(++lastDot);
        }
         return fileType;
     }

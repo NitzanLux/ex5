@@ -1,20 +1,21 @@
-package DirectoryProcessor;
+package filesprocessing;
+
 import java.io.*;
 import java.util.ArrayList;
 
-/**
+/*
  * This class reads the text from the command file and saves it in an array list of Strings.
  */
-public class CommandFile extends FileFacade {
-    public CommandFile(String s) {
+class CommandFile extends FileFacade {
+    CommandFile(String s) {
         super(s);
     }
 
-    /**
+    /*
      * The method reads the file, and returns an arrayList containing all the lines in the file
      * @return the array list representing all the strings in the file
      */
-    public ArrayList<String> readFile() {
+    ArrayList<String> readFile() {
 
         ArrayList<String> fileData = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public class CommandFile extends FileFacade {
                 i++; // Increases the iterator through the arrayList
             }
         } catch (IOException ioe) {
-            System.out.println("error");
+            ioe.printStackTrace();
         }
         return fileData;
     } // end of readFile method

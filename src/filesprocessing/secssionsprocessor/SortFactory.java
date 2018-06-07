@@ -1,6 +1,7 @@
-package DirectoryProcessor.SecssionProcessor;
+package filesprocessing.secssionsprocessor;
 
-import DirectoryProcessor.FileFacade;
+import filesprocessing.FileFacade;
+
 import java.util.Comparator;
 
 /*
@@ -51,7 +52,8 @@ class SortFactory {
         private static final int EQUAL_FACTOR = 0;
 
         /*
-         * abstract method for compering 2 files the fires one is the current file and the outher one is the one to compere with
+         * abstract method for compering 2 files the fires one is the current file and
+         * the outher one is the one to compere with
          */
         abstract int compareIt(FileFacade currentFile, FileFacade fileToComper);
 
