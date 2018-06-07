@@ -63,15 +63,22 @@ public class FileAnalyzer {
 
             try {
                 String[] filesToPrint = CurrentSecssion.getInstance().getCurrentSessionOutput(filterValue, orderValue);
+                printFiles(filesToPrint);
             } catch (SecssionCreationException.FilterCreationException e) {
                 //todo somsthing
             }catch (SecssionCreationException.SorterCreationException e) {
-
+                // todo something
             }
             //out.printf("the index is now: %d filterValue: %s orderValue: %s%n", i, filterValue, orderValue);
         } // end of for loop
     }
 
+    // private method to print the names of the filtered and sortered files
+    private void printFiles(String[] filesToPrint){
+        for (int i = 0; i< filesToPrint.length; i++){
+            System.out.println(filesToPrint[i]);
+        }
+    }
 
 
      void checkTypeTwoErrors(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
