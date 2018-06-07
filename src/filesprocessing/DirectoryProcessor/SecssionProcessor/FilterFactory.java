@@ -1,4 +1,4 @@
-package DirectoryProcessor.SecssionProcessor;
+package filesprocessing.DirectoryProcessor.SecssionProcessor;
 
 import java.io.File;
 import java.io.FileFilter;

@@ -1,4 +1,4 @@
-package DirectoryProcessor;
+package filesprocessing.DirectoryProcessor;
 import DirectoryProcessor.FileFacade;
 
 import java.io.*;

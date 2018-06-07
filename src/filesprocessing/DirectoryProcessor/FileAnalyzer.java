@@ -1,7 +1,9 @@
-package DirectoryProcessor;
+package filesprocessing.DirectoryProcessor;
 
-import DirectoryProcessor.SecssionProcessor.CurrentSecession;
-import DirectoryProcessor.SecssionProcessor.SecessionCreationException;
+
+
+import filesprocessing.DirectoryProcessor.SecssionProcessor.CurrentSecession;
+import filesprocessing.DirectoryProcessor.SecssionProcessor.SecessionCreationException;
 
 import java.util.ArrayList;
 import java.lang.*;

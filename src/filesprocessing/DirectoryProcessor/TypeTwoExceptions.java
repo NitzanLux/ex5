@@ -1,11 +1,11 @@
-package DirectoryProcessor;
+package filesprocessing.DirectoryProcessor;
 
 public abstract class TypeTwoExceptions extends Exception {
     private static final long serialVersionUID=1L;
-    private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s\n";
+    private static final String TYPE_2_ERROR_PREFIX = "ERROR: ";
 
     TypeTwoExceptions(String msg){
-        super(String.format(TYPE_2_ERROR_PREFIX, msg));
+        super(TYPE_2_ERROR_PREFIX+msg);
     }
 
     static class BadFilterSectionName extends TypeTwoExceptions {
@@ -21,6 +21,11 @@ public abstract class TypeTwoExceptions extends Exception {
     static class BadFormatFile extends TypeTwoExceptions{
         BadFormatFile(){
             super("Bad format");
+        }
+    }
+    public static abstract class IOExceptions extends TypeTwoExceptions{
+        IOExceptions(String msg) {
+            super(msg);
         }
     }
     static class FileNotFoundException extends TypeTwoExceptions{

@@ -1,4 +1,4 @@
-package DirectoryProcessor;
+package filesprocessing.DirectoryProcessor;
 import java.io.File;
 import java.io.FileFilter;
 
