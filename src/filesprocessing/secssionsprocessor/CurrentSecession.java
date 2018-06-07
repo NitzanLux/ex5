@@ -1,12 +1,15 @@
-package filesprocessing.DirectoryProcessor.SecssionProcessor;
+package filesprocessing.secssionsprocessor;
 
 
-import filesprocessing.DirectoryProcessor.FileFacade;
+import filesprocessing.FileFacade;
 
 import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
 
+/**
+ * a singletone class which hold a one secssion every time , and process the section to the proper name of files.
+ */
 public class CurrentSecession {
     private static final String VALUES_SEPARATOR = "#";
     private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";

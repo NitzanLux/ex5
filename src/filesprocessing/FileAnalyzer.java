@@ -1,9 +1,9 @@
-package filesprocessing.DirectoryProcessor;
+package filesprocessing;
 
 
 
-import filesprocessing.DirectoryProcessor.SecssionProcessor.CurrentSecession;
-import filesprocessing.DirectoryProcessor.SecssionProcessor.SecessionCreationException;
+import filesprocessing.secssionsprocessor.CurrentSecession;
+import filesprocessing.secssionsprocessor.SecessionCreationException;
 
 import java.util.ArrayList;
 import java.lang.*;
@@ -11,10 +11,10 @@ import java.lang.*;
 /**
  *
  */
-public class FileAnalyzer {
-    private static FileAnalyzer instance;
+class FileAnalyzer {
+    private static FileAnalyzer instance=new FileAnalyzer();
     private FileAnalyzer(){}
-    public static FileAnalyzer getInstance() {
+    static FileAnalyzer getInstance() {
         return instance;
     }
 
@@ -33,8 +33,8 @@ public class FileAnalyzer {
     void analyzeStringList(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
             TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
         checkTypeTwoErrors(fileData); // Checks if there are type 2 errors in the file
-        String filterValue = "";
-        String orderValue = "";
+        String filterValue ;
+        String orderValue ;
         int filterLine=0;
         int orderLine=0;
         // This loop goes over the array list and filters and sorters files by each section
