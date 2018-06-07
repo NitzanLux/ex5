@@ -1,5 +1,8 @@
 package DirectoryProcessor;
 
+/**
+ * The class represents
+ */
 public abstract class TypeTwoExceptions extends Exception {
     private static final long serialVersionUID=1L;
     private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s\n";
