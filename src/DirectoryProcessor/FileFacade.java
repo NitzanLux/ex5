@@ -10,12 +10,17 @@ public class FileFacade  {
     private File file;
 
     /**
-     *
+     * creates a new FileFacade instance
      * @param s - the path of the file to create
      */
     public FileFacade(String s) {
         file=new File(s);
     }
+
+    /**
+     * 
+     * @param file
+     */
     private FileFacade(File file){
         this.file=file;
     }
