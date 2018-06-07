@@ -15,7 +15,7 @@ public class DirectoryProcessor {
 
     public static void main(String [] args) throws TypeTwoExceptions.BadFilterSectionName,
             TypeTwoExceptions.BadOrderSectionName,
-            TypeTwoExceptions.IncorrentAmountOfArguments,
+            TypeTwoExceptions.IncorrectAmountOfArguments,
             TypeTwoExceptions.FileNotFoundException, TypeTwoExceptions.NoFilesInSourceDir,
             TypeTwoExceptions.BadFormatFile {
         checkArgs(args); // checks the validation of arguments, if valid, continues
@@ -36,10 +36,10 @@ public class DirectoryProcessor {
         }
     }
 
-    private static void checkArgs(String[]args) throws TypeTwoExceptions.IncorrentAmountOfArguments {
+    private static void checkArgs(String[]args) throws TypeTwoExceptions.IncorrectAmountOfArguments {
         // Checks if the number of arguments is smaller then 2 - in this case throws exception and stops
         if (args.length < MIN_NUM_OF_ARGUMENTS){
-            throw new TypeTwoExceptions.IncorrentAmountOfArguments();
+            throw new TypeTwoExceptions.IncorrectAmountOfArguments();
         }
     }
 

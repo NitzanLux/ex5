@@ -11,7 +11,8 @@ abstract class TypeTwoExceptions extends Exception {
     private static final String ORDER_SUB_SECTION_MISSING = "ORDER sub-section missing";
     private static final String BAD_FORMAT = "Bad format";
     private static final String FILE_NOT_FOUND = "file not found";
-    private static final String WRONG_USAGE_SHOULD_RECEIVE_2_ARGUMENTS = "Wrong usage. Should receive 2 arguments";
+    private static final String WRONG_USAGE_SHOULD_RECEIVE_2_ARGUMENTS = "Wrong usage. Should receive 2" +
+            " arguments";
     private static final String NO_FILES_IN_SOURCEDIR = "No files in sourcedir";
 
     /*
@@ -50,8 +51,8 @@ abstract class TypeTwoExceptions extends Exception {
             super(FILE_NOT_FOUND);
         }
     }
-    static class IncorrentAmountOfArguments extends TypeTwoExceptions{
-        IncorrentAmountOfArguments(){
+    static class IncorrectAmountOfArguments extends TypeTwoExceptions{
+        IncorrectAmountOfArguments(){
             super(WRONG_USAGE_SHOULD_RECEIVE_2_ARGUMENTS);
         }
     }
