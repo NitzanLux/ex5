@@ -6,7 +6,7 @@ import java.io.FileFilter;
  * an abstract class which is a facade of java.io.File.
  */
 public class FileFacade  {
-
+    /*--constants--*/
     private static final int NO_DOT_IN_FILE = -1;
     private static final String SUFFIX_INDICATORS = ".";
     private File file;
