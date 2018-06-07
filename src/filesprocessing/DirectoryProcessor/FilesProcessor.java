@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class FilesProcessor {
 
-    static final int MIN_NUM_OF_ARGUMENTS = 1;
+    private static final int MIN_NUM_OF_ARGUMENTS = 1;
     private static final int PATH_NAME_POSITION = 0;
     private static final int COMMAND_NAME_POSITION = 1;
 
