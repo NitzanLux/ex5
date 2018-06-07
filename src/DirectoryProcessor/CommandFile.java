@@ -18,7 +18,7 @@ public class CommandFile extends FileFacade {
 
         ArrayList<String> fileData = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.getName()))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.getAbsolutePath()))) {
 
             String line;
             int i = 0;

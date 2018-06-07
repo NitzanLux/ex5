@@ -87,8 +87,7 @@ public class FileAnalyzer {
             for (int i = 0; i < fileData.size(); i++) {
 
                 i = checKFilter(fileData, i);
-                filterValue = fileData.get(i);
-
+//todo                filterValue = fileData.get(i);
                 i = checkOrder(fileData, i);
             }
      } // end of checkTypeTwoErrors method
@@ -99,25 +98,38 @@ public class FileAnalyzer {
     private int checKFilter(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadFilterSectionName {
         String line     = "";
         String nextLine = "";
-
-        if (fileData.get(lineNumber) != null) {
-            line = fileData.get(lineNumber);
-            if (line.compareTo(FILTER) == 0) { // If the current line equals FILTER
-                if (fileData.get(lineNumber+1) != null) {
-                    nextLine = fileData.get(lineNumber + 1);
-                    // Checks if the nextLine is also FILTER, in this case prints error message
-                    if (nextLine.compareTo(FILTER) == 0) {
-                        System.err.print(String.format("Warning in line: %d%d", lineNumber, 1));
-                    } else {
-                        lineNumber += INCREASE_TWO;
-                        return lineNumber;
-                    }
-                }
-            }
-            else {
-                throw new TypeTwoExceptions.BadFilterSectionName();
-            }
+        boolean isFilterHeadLine=false;
+        boolean isFilterValue=false;
+        while (!fileData.get(lineNumber).equals(ORDER)){
+            if(fileData.get(lineNumber).equals(FILTER)&&!isFilterHeadLine){
+                isFilterHeadLine=true;
+                lineNumber++;
+                continue;
+            }else if (!isFilterValue&&fileData.get(lineNumber).equals(ORDER)
         }
+
+
+
+
+
+//        if (fileData.get(lineNumber) != null) {
+//            line = fileData.get(lineNumber);
+//            if (line.equals(FILTER)) { // If the current line equals FILTER
+//                if (fileData.get(lineNumber+1) != null) {
+//                    nextLine = fileData.get(lineNumber + 1);
+//                    // Checks if the nextLine is also FILTER, in this case prints error message
+//                    if (nextLine.compareTo(FILTER) == 0) {
+//                        System.err.print(String.format("Warning in line: %d%d", lineNumber, 1));
+//                    } else {
+//                        lineNumber += INCREASE_TWO;
+//                        return lineNumber;
+//                    }
+//                }
+//            }
+//            else {
+//                throw new TypeTwoExceptions.BadFilterSectionName();
+//            }
+//        }
         return lineNumber;
     } // end of checkFilter method
 
