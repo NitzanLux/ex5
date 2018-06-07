@@ -1,8 +1,6 @@
 package filesprocessing.secssionsprocessor;
 
-
 import filesprocessing.FileFacade;
-
 import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -11,23 +9,44 @@ import java.util.Comparator;
  * a singletone class which hold a one secssion every time , and process the section to the proper name of files.
  */
 public class CurrentSecession {
+    /* constants */
     private static final String VALUES_SEPARATOR = "#";
     private static final String REVERSE_SORT_KEY_VALUE = "REVERSE";
     private static final String NOT_OPERATION_KEY_WORD = "NOT";
     private static final String VALUE_SEPARATOR_KEY_WORD = "#";
     private static final String NOT_UPHOLD_OPERATOR = "NO";
     private static final String UPHOLD_OPERATOR = "YES";
+    /*
+    * instance .
+     */
     private static CurrentSecession instance=new CurrentSecession();
+    /*
+    * the current path name.
+     */
     private FileFacade pathName=null;
+    /*
+    * the current filter and sorter.
+     */
     private FileFilter currentFileFilter;
     private Comparator<FileFacade> currentSort;
+    /*
+    * default constractor.
+     */
     private CurrentSecession(){
         setDefaultValus();
     }
+    /*
+    * instance default values that are placed every new secession ittration.
+     */
     private void setDefaultValus(){
         currentSort= SortFactory.getInstance().getAbsComparator();
         currentFileFilter=FilterFactory.getInstance().getAllFilter();
     }
+
+    /**
+     * get instance
+     * @return singlton instance.
+     */
     public static CurrentSecession getInstance() {
         return instance;
     }
@@ -40,6 +59,13 @@ public class CurrentSecession {
         this.pathName = path;
     }
 
+    /**
+     * set current secssion filter and sorter
+     * @param filterName the name of the filter
+     * @param orderName the name of the order
+     * @throws SecessionCreationException.SorterCreationException cannot create sorter with the fiven order key name.
+     * @throws SecessionCreationException.FilterCreationException cannot create filter with the given filter key name.
+     */
     public void setFilterAndSorter(String filterName,String orderName) throws
             SecessionCreationException.SorterCreationException,
             SecessionCreationException.FilterCreationException {
@@ -61,7 +87,9 @@ public class CurrentSecession {
         return secessionFilesOutputNames;
 
     }
-
+    /*
+    * set currnt filter.
+     */
     private void setFileFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
         FileFilter currentFileFilter = readFilterKey(filterKey);
         if (currentFileFilter == null){

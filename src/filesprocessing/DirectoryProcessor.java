@@ -1,8 +1,6 @@
 package filesprocessing;
 
-
 import filesprocessing.secssionsprocessor.CurrentSecession;
-
 import java.util.ArrayList;
 
 /**
