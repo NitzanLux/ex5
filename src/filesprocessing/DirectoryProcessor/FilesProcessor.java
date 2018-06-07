@@ -1,7 +1,7 @@
 package filesprocessing.DirectoryProcessor;
 
-import DirectoryProcessor.FileFacade;
-import DirectoryProcessor.SecssionProcessor.CurrentSecession;
+
+import filesprocessing.DirectoryProcessor.SecssionProcessor.CurrentSecession;
 
 import java.util.ArrayList;
 

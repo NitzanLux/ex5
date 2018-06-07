@@ -1,6 +1,6 @@
 package filesprocessing.DirectoryProcessor.SecssionProcessor;
 
-import DirectoryProcessor.SecssionProcessor.SecessionCreationException;
+
 import filesprocessing.DirectoryProcessor.FileFacade;
 
 import java.io.FileFilter;
