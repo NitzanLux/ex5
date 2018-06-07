@@ -1,5 +1,8 @@
 package filesprocessing;
 
+/**
+ * The class represents
+ */
 abstract class TypeTwoExceptions extends Exception {
     /*--constance--*/
     private static final long serialVersionUID=1L;
@@ -58,5 +61,4 @@ abstract class TypeTwoExceptions extends Exception {
             super(NO_FILES_IN_SOURCEDIR);
         }
     }
-
 }
