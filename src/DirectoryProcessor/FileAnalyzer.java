@@ -29,12 +29,10 @@ public class FileAnalyzer {
     *it filters and orders the files
     */
     void analyzeStringList(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
-            TypeTwoExceptions.BadOrderSectionName {
+            TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
         checkTypeTwoErrors(fileData); // Checks if there are type 2 errors in the file
-        String line = "";
         String filterValue = "";
         String orderValue = "";
-        String nextLine = "";
         int filterLine=0;
         int orderLine=0;
         // This loop goes over the array list and filters and sorters files by each section
@@ -76,7 +74,7 @@ public class FileAnalyzer {
 
 
      private void checkTypeTwoErrors(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
-                                                                TypeTwoExceptions.BadOrderSectionName {
+             TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
             // This loop iterates through the array, for each section checks if in the section exists type 2 errors
             for (int i = 0; i < fileData.size(); i++) {
                 i = checkFilter(fileData, i);
@@ -88,7 +86,7 @@ public class FileAnalyzer {
 
 
     private int checkFilter(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadFilterSectionName,
-            TypeTwoExceptions.BadOrderSectionName {
+            TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
         boolean isFilterHeadLine=false;
         boolean isFilterValue=false;
         for (int i = 0; i <3; i++) {
@@ -106,13 +104,15 @@ public class FileAnalyzer {
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER)||fileData.get(lineNumber).
                 toUpperCase().equals(FILTER_HEADLINE)){
             throw new  TypeTwoExceptions.BadFilterSectionName();
-        }else {
-            throw new TypeTwoExceptions.BadOrderSectionName();
-        }
+        }else if (fileData.get(lineNumber).toUpperCase().equals(FILTER_HEADLINE)){
+        throw new TypeTwoExceptions.BadOrderSectionName();
+    }else {
+        throw new TypeTwoExceptions.BadFormatFile();
+    }
     } // end of checkFilter method
 
     private int checkOrder(ArrayList<String> fileData, int lineNumber) throws TypeTwoExceptions.BadOrderSectionName,
-            TypeTwoExceptions.BadFilterSectionName {
+            TypeTwoExceptions.BadFilterSectionName, TypeTwoExceptions.BadFormatFile {
 
         boolean isSortHeadLine=false;
         boolean isSortValue=false;
@@ -133,11 +133,13 @@ public class FileAnalyzer {
             }
         }
 
-        if (fileData.get(lineNumber).toUpperCase().equals(ORDER)||fileData.get(lineNumber).
-                toUpperCase().equals(FILTER_HEADLINE)){
+        if (fileData.get(lineNumber).toUpperCase().equals(ORDER)){
             throw new  TypeTwoExceptions.BadFilterSectionName();
-        }else {
+        }else if (fileData.get(lineNumber).
+                toUpperCase().equals(FILTER_HEADLINE)){
             throw new TypeTwoExceptions.BadOrderSectionName();
+        }else {
+            throw new TypeTwoExceptions.BadFormatFile();
         }
         }
 }

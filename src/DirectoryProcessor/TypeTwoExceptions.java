@@ -8,37 +8,32 @@ public abstract class TypeTwoExceptions extends Exception {
         super(String.format(TYPE_2_ERROR_PREFIX, msg));
     }
 
-    public static class BadFilterSectionName extends TypeTwoExceptions {
+    static class BadFilterSectionName extends TypeTwoExceptions {
         BadFilterSectionName() {
             super("FILTER sub-section missing"); // todo magic
         }
     }
-    public static class BadOrderSectionName extends TypeTwoExceptions{
+    static class BadOrderSectionName extends TypeTwoExceptions{
         BadOrderSectionName() {
             super("ORDER sub-section missing"); // todo magic
         }
     }
-    public static class BadFormatFile extends TypeTwoExceptions{
+    static class BadFormatFile extends TypeTwoExceptions{
         BadFormatFile(){
             super("Bad format");
         }
     }
-    public static abstract class IOExceptions extends TypeTwoExceptions{
-        IOExceptions(String msg) {
-            super(msg);
-        }
-    }
-    public static class FileNotFoundException extends TypeTwoExceptions{
+    static class FileNotFoundException extends TypeTwoExceptions{
         FileNotFoundException(){
             super("file not found");
         }
     }
-    public static class IncorrentAmountOfArguments extends TypeTwoExceptions{
+    static class IncorrentAmountOfArguments extends TypeTwoExceptions{
         IncorrentAmountOfArguments(){
             super("Wrong usage. Should receive 2 arguments");
         }
     }
-    public static class NoFilesInSourceDir extends TypeTwoExceptions{
+    static class NoFilesInSourceDir extends TypeTwoExceptions{
         NoFilesInSourceDir(){
             super("No files in sourcedir");
         }

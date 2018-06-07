@@ -16,7 +16,7 @@ public class FilesProcessor {
 
     public static void main(String [] args) throws TypeTwoExceptions.BadFilterSectionName, TypeTwoExceptions.BadOrderSectionName,
             TypeTwoExceptions.IncorrentAmountOfArguments,
-            TypeTwoExceptions.FileNotFoundException, TypeTwoExceptions.NoFilesInSourceDir {
+            TypeTwoExceptions.FileNotFoundException, TypeTwoExceptions.NoFilesInSourceDir, TypeTwoExceptions.BadFormatFile {
         checkArgs(args); // checks the validation of arguments, if valid, continues
         String commendFileName = args[COMMAND_NAME_POSITION];
         CommandFile commandFile = new CommandFile(commendFileName); // creates a new instance of CommandFile

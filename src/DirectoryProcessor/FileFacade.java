@@ -9,7 +9,7 @@ public class FileFacade  {
 
     private File file;
 
-    public FileFacade(String s) {
+    FileFacade(String s) {
         file=new File(s);
     }
     private FileFacade(File file){
