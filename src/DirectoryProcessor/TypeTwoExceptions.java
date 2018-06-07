@@ -26,5 +26,15 @@ public abstract class TypeTwoExceptions extends Exception {
             super(msg);
         }
     }
+    public static class FileNotFoundException extends TypeTwoExceptions{
+        FileNotFoundException(){
+            super("file not found");
+        }
+    }
+    public static class IncorrentAmountOfArguments extends TypeTwoExceptions{
+        IncorrentAmountOfArguments(){
+            super("Wrong usage. Should receive 2 arguments");
+        }
+    }
 
 }

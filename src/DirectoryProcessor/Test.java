@@ -11,13 +11,9 @@ public class Test {
         ArrayList<String> as = new ArrayList<String>();
         CommendFile cm = new CommendFile(name);
         if (cm.isFile()) {
-            //System.out.println("h");
-            //try {
-                as = cm.readFile();
-            //}
-            //catch(){
 
-  //          }
+                as = cm.readFile();
+
         }
         CurrentSecssion.getInstance().setPathName(name);
         FileAnalyzer fa = new FileAnalyzer();
