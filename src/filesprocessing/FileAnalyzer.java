@@ -16,7 +16,6 @@ class FileAnalyzer {
     private static final String FILTER_HEADLINE = "FILTER";
     private static final String ORDER_HEADLINE = "ORDER";
     private static final String TYPE_I_ERROR_MSG_STR_FORMAT = "Warning in line %d\n";
-    private static final int JUMP_TO_ORDER = 2;
     private static final String DEFAULT_SORTER = "abs";
 
     /*
@@ -95,6 +94,9 @@ class FileAnalyzer {
                 return ++lineNumber;
             }
         }
+        if (fileData.size()<=lineNumber){
+            throw new TypeTwoExceptions.BadFormatFile();
+        }
         if (fileData.get(lineNumber).toUpperCase().equals(FILTER_HEADLINE)) {
             throw new TypeTwoExceptions.BadFilterSectionName();
         } else {
@@ -113,6 +115,9 @@ class FileAnalyzer {
                 }
                 return ++lineNumber;
             }
+        }
+        if (fileData.size()<=lineNumber){
+            throw new TypeTwoExceptions.BadFormatFile();
         }
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER_HEADLINE)) {
             throw new TypeTwoExceptions.BadOrderSectionName();

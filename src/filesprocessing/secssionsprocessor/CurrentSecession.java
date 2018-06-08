@@ -8,6 +8,7 @@ import java.util.Comparator;
 /**
  * a singletone class which hold a one secssion every time , and process the section to the proper name
  * of files.
+ * @author liorit,nlux.
  */
 public class CurrentSecession {
     private static CurrentSecession instance=new CurrentSecession();

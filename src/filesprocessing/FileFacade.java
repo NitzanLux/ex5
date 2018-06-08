@@ -4,6 +4,7 @@ import java.io.FileFilter;
 
 /**
  * an abstract class which is a facade of java.io.File.
+ * @author nlux ,liorit.
  */
 public class FileFacade  {
     /*--constants--*/
