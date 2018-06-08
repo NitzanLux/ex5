@@ -39,7 +39,8 @@ class FileAnalyzer {
      * it filters and orders the files, by sending each section to CurrentSecession class.
      */
     void analyzeStringList(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
-            TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
+                                                              TypeTwoExceptions.BadOrderSectionName,
+                                                              TypeTwoExceptions.BadFormatFile {
         checkTypeTwoErrors(fileData); // Checks if there are type 2 errors in the file
         String filterValue;
         String orderValue;
@@ -48,12 +49,14 @@ class FileAnalyzer {
         // This loop goes over the array list and filters and sorters files by each section
         for (int i = 0; i < fileData.size(); i++) {
             i++;
+            // Checks if reached the end of fileData
             if (i >= fileData.size()) {
                 break;
             }
             filterValue = fileData.get(i);
             filterLine = ++i;//pass to order headLine
             i++;//pass the order headline
+            // Checks if the current line is FILTER headline
             if (fileData.size() <= i || fileData.get(i).equals(FILTER_HEADLINE)) {
                 i--;//if the headline is at the currnt pointer i.
                 orderValue = DEFAULT_SORTER;
@@ -76,6 +79,7 @@ class FileAnalyzer {
         }
     }
 
+    /* private method to check if there are type 2 errors in the command file */
     private void checkTypeTwoErrors(ArrayList<String> fileData) throws
             TypeTwoExceptions.BadFilterSectionName,
             TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
@@ -87,18 +91,22 @@ class FileAnalyzer {
         }
     } // end of checkTypeTwoErrors method
 
-
+    /* private method that looks for type 2 errors in the FILTER section */
     private int checkFilter(ArrayList<String> fileData, int lineNumber)
             throws TypeTwoExceptions.BadFilterSectionName, TypeTwoExceptions.BadFormatFile {
+        // Checks if the current line is FILTER headline
         if (fileData.get(lineNumber).equals(FILTER_HEADLINE)) {
             lineNumber++;
+            // Checks of the size of fileDate is bigger than lineNumber
             if (fileData.size() > lineNumber) {
                 return ++lineNumber;
             }
         }
+        // Checks if the size of fileData is smaller than lineNumber
         if (fileData.size() <= lineNumber) {
             throw new TypeTwoExceptions.BadFormatFile();
         }
+        // Checks if there is badFilter name error in current line
         if (fileData.get(lineNumber).toUpperCase().equals(FILTER_HEADLINE)) {
             throw new TypeTwoExceptions.BadFilterSectionName();
         } else {
@@ -106,11 +114,15 @@ class FileAnalyzer {
         }
     } // end of checkFilter method
 
+    /* private method that looks for type 2 errors in the ORDER section */
     private int checkOrder(ArrayList<String> fileData, int lineNumber)
             throws TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
+        // Checks if the size of the file is bigger than lineNumber
         if (fileData.size() > lineNumber) {
+            // Checks if the current line is ORDER headline
             if (fileData.get(lineNumber).equals(ORDER_HEADLINE)) {
                 if (fileData.size() > lineNumber + 1) {
+                    // Checks if the next line is FILTER headline
                     if (fileData.get(lineNumber + 1).equals(FILTER_HEADLINE)) {
                         return lineNumber;
                     }
@@ -121,6 +133,7 @@ class FileAnalyzer {
         if (fileData.size() <= lineNumber) {
             throw new TypeTwoExceptions.BadFormatFile();
         }
+        // Checks if there is badOrder name error in current line
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER_HEADLINE)) {
             throw new TypeTwoExceptions.BadOrderSectionName();
         } else {
@@ -130,6 +143,7 @@ class FileAnalyzer {
 
     // private method to print the names of the filtered and sorted files
     private void printFiles(String[] filesToPrint) {
+        // This loop goes over the array of names of files and prints each name
         for (int i = 0; i < filesToPrint.length; i++) {
             System.out.println(filesToPrint[i]);
         }
