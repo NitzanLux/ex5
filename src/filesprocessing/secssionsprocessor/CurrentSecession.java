@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * a singletone class which hold a one secssion every time , and process the section to the proper name of files.
+ * a singletone class which hold a one secssion every time , and process the section to the proper name
+ * of files.
  */
 public class CurrentSecession {
     private static CurrentSecession instance=new CurrentSecession();
@@ -58,18 +59,37 @@ public class CurrentSecession {
     }
 
     /**
-     * set current secssion filter and sorter
-     * @param filterName the name of the filter
-     * @param orderName the name of the order
-     * @throws SecessionCreationException.SorterCreationException cannot create sorter with the fiven order key name.
-     * @throws SecessionCreationException.FilterCreationException cannot create filter with the given filter key name.
-     */
-    public void setFilterAndSorter(String filterName,String orderName) throws
-            SecessionCreationException.SorterCreationException,
-            SecessionCreationException.FilterCreationException {
-        setFileFilter(filterName);
-        setSorter(orderName);
+     * set current secssion sorter
+     * @param sorterKey the name of the sorter
+     * @throws SecessionCreationException.SorterCreationException cannot create sorter with the fiven order
+     * key name.
+    */
+    public void setSorter(String sorterKey) throws SecessionCreationException.SorterCreationException {
+        Comparator<FileFacade> comparator=readSortKey(sorterKey);
+        if (comparator==null){
+            currentSort=SortFactory.getInstance().getAbsComparator();
+            throw new SecessionCreationException.SorterCreationException();
+        }else {
+            currentSort=comparator;
+        }
     }
+
+    /**
+     * set current secssion filter.
+     * @param filterKey  the name of the filter
+     * @throws SecessionCreationException.FilterCreationException  cannot create sorter with the fiven filter
+     * key name.
+     */
+     public void setFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
+        FileFilter currentFileFilter = readFilterKey(filterKey);
+        if (currentFileFilter == null){
+            this.currentFileFilter=FilterFactory.getInstance().getAllFilter();
+            throw new SecessionCreationException.FilterCreationException();
+        }else {
+                this.currentFileFilter=currentFileFilter;
+            }
+        }
+
     /**
      * get currnt Session list of files.
      * @return orderd array of files names.
@@ -85,17 +105,6 @@ public class CurrentSecession {
         return secessionFilesOutputNames;
 
     }
-    /*
-    * set currnt filter.
-     */
-    private void setFileFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
-        FileFilter currentFileFilter = readFilterKey(filterKey);
-        if (currentFileFilter == null){
-            throw new SecessionCreationException.FilterCreationException();
-        }else {
-                this.currentFileFilter=currentFileFilter;
-            }
-        }
 
     /*
      * convert filter string into a FileFilter Object.
@@ -123,6 +132,7 @@ public class CurrentSecession {
             Double doubleValue = getDouble(values[i]);
             if (doubleValue != null && doubleValue >= 0) {//non negativ number
                 if (firstDouble == null) {
+                    stringToFilter=values[i];//if it aint ment to be a double.
                     firstDouble = doubleValue;
                 } else if (secondDouble == null) {
                     secondDouble = doubleValue;
@@ -136,8 +146,8 @@ public class CurrentSecession {
                 }
             }
         }
-        return getFilter(values.length - notOperationInclude, filterName, firstDouble, secondDouble,
-                stringToFilter, filterParameterBoolean, notOperation);
+        return getFilter(values.length - notOperationInclude, filterName, firstDouble,
+                secondDouble,stringToFilter, filterParameterBoolean, notOperation);
     }
 
     /*
@@ -160,13 +170,20 @@ public class CurrentSecession {
                 if (firstBoolean!=null){
                     return FilterFactory.getInstance().getFilter(filterName,firstBoolean,notOperation);
                 }else if (firstDouble!=null){
-                    return FilterFactory.getInstance().getFilter(filterName,firstDouble,notOperation);
+                    FileFilter filterToSend=FilterFactory.getInstance().getFilter(filterName,firstDouble,
+                            notOperation);
+                    if (filterToSend==null){//if the keyWord aint ment to be Double.
+                        filterToSend=FilterFactory.getInstance().getFilter(filterName,stringToFilter,
+                                notOperation);
+                    }
+                    return filterToSend;
                 }else if (stringToFilter!=null){
                     return FilterFactory.getInstance().getFilter(filterName,stringToFilter,notOperation);
                 }break;
             case 3:
                 if (firstDouble!=null&&secondDouble!=null){
-                    return FilterFactory.getInstance().getFilter(filterName,secondDouble,firstDouble,notOperation);
+                    return FilterFactory.getInstance().getFilter(filterName,secondDouble,firstDouble,
+                            notOperation);
                 }
             default:
                 break;
@@ -197,14 +214,7 @@ public class CurrentSecession {
             return null;
         }
     }
-    private void setSorter(String sorterKey) throws SecessionCreationException.SorterCreationException {
-        Comparator<FileFacade> comparator=readSortKey(sorterKey);
-        if (comparator==null){
-            throw new SecessionCreationException.SorterCreationException();
-        }else {
-            currentSort=comparator;
-        }
-    }
+
     private Comparator<FileFacade> readSortKey(String sorterKey){
         String[] values=sorterKey.split(VALUES_SEPARATOR);
         if (values.length>2||values.length<1){

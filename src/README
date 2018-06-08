@@ -32,8 +32,8 @@ SortFactory. The classes are in the same package because they are used to filter
 The FilterFactory and SortFactory uses enum because it saves constants values and it doesn't change when the
 program is running.
 It is also very simple to add a new filter/order type - we simply add it to the enum, and no more work is
- needed. That's why it uses the Single
-Choice principle. The methodology of FilterFactory and SortFactory are equal, only that the FilterFactory has
+ needed. That's why it uses the Single Choice principle.
+The methodology of FilterFactory and SortFactory are equal, only that the FilterFactory has
  more parameters to filter.
 Exceptions - there are two basic classes of Exceptions, one for type 1 exceptions and the other one for type
  2 exceptions.

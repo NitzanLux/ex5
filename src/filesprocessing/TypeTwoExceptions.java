@@ -6,14 +6,15 @@ package filesprocessing;
 abstract class TypeTwoExceptions extends Exception {
     /*--constance--*/
     private static final long serialVersionUID = 1L;
-    private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s\n";
-    private static final String FILTER_SUB_SECTION_MISSING = "FILTER sub-section missing";
-    private static final String ORDER_SUB_SECTION_MISSING = "ORDER sub-section missing";
-    private static final String BAD_FORMAT = "Bad format";
-    private static final String FILE_NOT_FOUND = "file not found";
-    private static final String WRONG_USAGE_SHOULD_RECEIVE_2_ARGUMENTS = "Wrong usage. Should receive 2" +
+    private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s";
+    private static final String BAD_FILTER_MSG = "FILTER sub-section missing";
+    private static final String BAD_ORDER_MSG = "ORDER sub-section missing";
+    private static final String BAD_FORMAT_MSG = "Bad format";
+    private static final String FILE_NOT_FOUND_MSG = "file not found";
+    private static final String INCORRECT_AMOUNT_MSG = "Wrong usage. Should receive 2" +
             " arguments";
     private static final String NO_FILES_IN_SOURCEDIR = "No files in sourcedir";
+    private static final String IO_COMMANDFILE_ERROR_MSG = "problem with accessing commandFile";
 
     /*
      * constractor rais exception which is type two exption constractor.
@@ -31,7 +32,7 @@ abstract class TypeTwoExceptions extends Exception {
          * a default constructor.
          */
         BadFilterSectionName() {
-            super(FILTER_SUB_SECTION_MISSING);
+            super(BAD_FILTER_MSG);
         }
     }
 
@@ -43,7 +44,7 @@ abstract class TypeTwoExceptions extends Exception {
          * a default constructor.
          */
         BadOrderSectionName() {
-            super(ORDER_SUB_SECTION_MISSING);
+            super(BAD_ORDER_MSG);
         }
     }
 
@@ -55,7 +56,7 @@ abstract class TypeTwoExceptions extends Exception {
          * a default constructor.
          */
         BadFormatFile() {
-            super(BAD_FORMAT);
+            super(BAD_FORMAT_MSG);
         }
     }
 
@@ -67,7 +68,18 @@ abstract class TypeTwoExceptions extends Exception {
          * a default constructor.
          */
         FileNotFoundException() {
-            super(FILE_NOT_FOUND);
+            super(FILE_NOT_FOUND_MSG);
+        }
+    }
+    /*
+     * indicate IO error has occure.
+     */
+    static class IOProblemInCommandFile extends TypeTwoExceptions{
+        /*
+        * a default constructor.
+         */
+        IOProblemInCommandFile(){
+            super(IO_COMMANDFILE_ERROR_MSG);
         }
     }
 
@@ -79,7 +91,7 @@ abstract class TypeTwoExceptions extends Exception {
          * a default constructor.
          */
         IncorrectAmountOfArguments() {
-            super(WRONG_USAGE_SHOULD_RECEIVE_2_ARGUMENTS);
+            super(INCORRECT_AMOUNT_MSG);
         }
     }
 

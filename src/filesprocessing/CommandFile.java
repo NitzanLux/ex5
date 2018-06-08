@@ -15,7 +15,7 @@ class CommandFile extends FileFacade {
      * The method reads the file, and returns an arrayList containing all the lines in the file
      * @return the array list representing all the strings in the file
      */
-    ArrayList<String> readFile() {
+    ArrayList<String> readFile() throws TypeTwoExceptions.IOProblemInCommandFile {
 
         ArrayList<String> fileData = new ArrayList<>();
 
@@ -29,7 +29,7 @@ class CommandFile extends FileFacade {
                 i++; // Increases the iterator through the arrayList
             }
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+          throw new TypeTwoExceptions.IOProblemInCommandFile();
         }
         return fileData;
     } // end of readFile method
