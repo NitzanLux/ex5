@@ -2,6 +2,7 @@ package filesprocessing;
 
 /*
  * The class represents an abstract type two expcion ,exclude io excption.
+ * @author nlux, liorait.
  */
 abstract class TypeTwoExceptions extends Exception {
     /*--constance--*/

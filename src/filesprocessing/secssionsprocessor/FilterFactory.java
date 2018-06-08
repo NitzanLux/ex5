@@ -5,6 +5,7 @@ import java.io.FileFilter;
 
 /*
  * singleton of filterFactory, generate an FileFilter for sorting file.
+ * @author nlux, liorait.
  */
 class FilterFactory {
     /* constants*/

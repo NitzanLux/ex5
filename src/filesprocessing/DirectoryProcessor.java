@@ -8,7 +8,8 @@ import java.util.ArrayList;
 /**
  * The main class. receives two arguments - the directory of files to filter&sort, and the command file.
  * If the arguments are valid, will filter and sort the files, for each section in the command file.
- * @author liorit,nlux
+ *
+ * @author liorait, nlux
  */
 public class DirectoryProcessor {
     /*--constants--*/
@@ -24,6 +25,7 @@ public class DirectoryProcessor {
             excepsionOccure = true;
             System.err.println(incorrectAmountOfArguments.getMessage());
         }
+        // If no exception occurred, continues
         if (!excepsionOccure) {
             String commendFileName = args[COMMAND_NAME_POSITION];
             CommandFile commandFile = new CommandFile(commendFileName);//creates a new instance of CommandFile
@@ -31,6 +33,7 @@ public class DirectoryProcessor {
             // Checks if the commend file is a valid file, if not, throws exception
             if (!(commandFile.isFile())) {
                 System.err.println(new TypeTwoExceptions.FileNotFoundException().getMessage());
+                // Checks if the directory is valid, if not, throws exception
             } else if (!(path.isDirectory())) {
                 System.err.println(new TypeTwoExceptions.NoFilesInSourceDir().getMessage());
             } else {
@@ -41,6 +44,7 @@ public class DirectoryProcessor {
                     System.err.println(ioProblemInCommandFile.getMessage());
                     excepsionOccure = true;
                 }
+                // Checks if no exception occurred, if do, continues
                 if (!excepsionOccure) {
                     // an array list of Strings
                     CurrentSecession.getInstance().setCurrentPath(path);
@@ -54,11 +58,12 @@ public class DirectoryProcessor {
         }
     }
 
+    /* private method to check if the number of arguments is correct */
     private static void checkArgs(String[] args) throws TypeTwoExceptions.IncorrectAmountOfArguments {
         // Checks if the number of arguments is smaller then 2 - in this case throws exception and stops
         if (args.length < MIN_NUM_OF_ARGUMENTS) {
             throw new TypeTwoExceptions.IncorrectAmountOfArguments();
         }
     }
-
 }
+

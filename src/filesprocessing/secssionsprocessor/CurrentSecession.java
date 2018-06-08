@@ -1,17 +1,19 @@
 package filesprocessing.secssionsprocessor;
 
 import filesprocessing.FileFacade;
+
 import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * a singletone class which hold a one secssion every time , and process the section to the proper name
+ * a singleton class which holds one section every time, and process the section to the proper name
  * of files.
- * @author liorit,nlux.
+ *
+ * @author liorait, nlux.
  */
 public class CurrentSecession {
-    private static CurrentSecession instance=new CurrentSecession();
+    private static CurrentSecession instance = new CurrentSecession();
 
     public static CurrentSecession getInstance() {
         return instance;
@@ -25,34 +27,38 @@ public class CurrentSecession {
     private static final String NOT_UPHOLD_OPERATOR = "NO";
     private static final String UPHOLD_OPERATOR = "YES";
     /*
-    * the current path name.
+     * the current path name.
      */
-    private FileFacade path =null;
+    private FileFacade path = null;
     /*
-    * the current filter and sorter.
+     * the current filter and sorter.
      */
     private FileFilter currentFileFilter;
     private Comparator<FileFacade> currentSort;
+
     /*
-    * default constractor.
+     * default constractor.
      */
-    private CurrentSecession(){
+    private CurrentSecession() {
         setDefaultValus();
     }
-    public void setCurrentPath(FileFacade path){
-        this.path=path;
+
+    public void setCurrentPath(FileFacade path) {
+        this.path = path;
     }
+
     /*
-    * instance default values that are placed every new secession ittration.
+     * instance default values that are placed every new secession ittration.
      */
-    private void setDefaultValus(){
-        currentSort= SortFactory.getInstance().getAbsComparator();
-        currentFileFilter=FilterFactory.getInstance().getAllFilter();
+    private void setDefaultValus() {
+        currentSort = SortFactory.getInstance().getAbsComparator();
+        currentFileFilter = FilterFactory.getInstance().getAllFilter();
     }
 
 
     /**
      * set the currnt path name for extraction.
+     *
      * @param path the path name.
      */
     public void setPath(FileFacade path) {
@@ -61,46 +67,49 @@ public class CurrentSecession {
 
     /**
      * set current secssion sorter
+     *
      * @param sorterKey the name of the sorter
      * @throws SecessionCreationException.SorterCreationException cannot create sorter with the fiven order
-     * key name.
-    */
+     *                                                            key name.
+     */
     public void setSorter(String sorterKey) throws SecessionCreationException.SorterCreationException {
-        Comparator<FileFacade> comparator=readSortKey(sorterKey);
-        if (comparator==null){
-            currentSort=SortFactory.getInstance().getAbsComparator();
+        Comparator<FileFacade> comparator = readSortKey(sorterKey);
+        if (comparator == null) {
+            currentSort = SortFactory.getInstance().getAbsComparator();
             throw new SecessionCreationException.SorterCreationException();
-        }else {
-            currentSort=comparator;
+        } else {
+            currentSort = comparator;
         }
     }
 
     /**
      * set current secssion filter.
-     * @param filterKey  the name of the filter
-     * @throws SecessionCreationException.FilterCreationException  cannot create sorter with the fiven filter
-     * key name.
+     *
+     * @param filterKey the name of the filter
+     * @throws SecessionCreationException.FilterCreationException cannot create sorter with the fiven filter
+     *                                                            key name.
      */
-     public void setFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
+    public void setFilter(String filterKey) throws SecessionCreationException.FilterCreationException {
         FileFilter currentFileFilter = readFilterKey(filterKey);
-        if (currentFileFilter == null){
-            this.currentFileFilter=FilterFactory.getInstance().getAllFilter();
+        if (currentFileFilter == null) {
+            this.currentFileFilter = FilterFactory.getInstance().getAllFilter();
             throw new SecessionCreationException.FilterCreationException();
-        }else {
-                this.currentFileFilter=currentFileFilter;
-            }
+        } else {
+            this.currentFileFilter = currentFileFilter;
         }
+    }
 
     /**
      * get currnt Session list of files.
+     *
      * @return orderd array of files names.
      */
-    public String[] getCurrentSessionOutput(){
-        FileFacade[] files= path.listFiles(currentFileFilter);
-        Arrays.sort(files,currentSort);
-        String[] secessionFilesOutputNames=new String[files.length];
-        for (int i = 0; i <files.length ; i++) {
-            secessionFilesOutputNames[i]=files[i].getName();
+    public String[] getCurrentSessionOutput() {
+        FileFacade[] files = path.listFiles(currentFileFilter);
+        Arrays.sort(files, currentSort);
+        String[] secessionFilesOutputNames = new String[files.length];
+        for (int i = 0; i < files.length; i++) {
+            secessionFilesOutputNames[i] = files[i].getName();
         }
         setDefaultValus();
         return secessionFilesOutputNames;
@@ -109,7 +118,7 @@ public class CurrentSecession {
 
     /*
      * convert filter string into a FileFilter Object.
-      * @param filterKey the filter requst string.
+     * @param filterKey the filter requst string.
      * @return FileFilter
      */
     private FileFilter readFilterKey(String filterKey) {
@@ -133,7 +142,7 @@ public class CurrentSecession {
             Double doubleValue = getDouble(values[i]);
             if (doubleValue != null && doubleValue >= 0) {//non negativ number
                 if (firstDouble == null) {
-                    stringToFilter=values[i];//if it aint ment to be a double.
+                    stringToFilter = values[i];//if it aint ment to be a double.
                     firstDouble = doubleValue;
                 } else if (secondDouble == null) {
                     secondDouble = doubleValue;
@@ -148,7 +157,7 @@ public class CurrentSecession {
             }
         }
         return getFilter(values.length - notOperationInclude, filterName, firstDouble,
-                secondDouble,stringToFilter, filterParameterBoolean, notOperation);
+                secondDouble, stringToFilter, filterParameterBoolean, notOperation);
     }
 
     /*
@@ -162,28 +171,29 @@ public class CurrentSecession {
      * @param notOperation is the Not operation exists
      * @return FileFilter if args are valid.
      */
-    private FileFilter getFilter(int currentSize,String filterName,Double firstDouble,Double secondDouble,
-                                 String stringToFilter,Boolean firstBoolean,boolean notOperation){
-        switch (currentSize){
+    private FileFilter getFilter(int currentSize, String filterName, Double firstDouble, Double secondDouble,
+                                 String stringToFilter, Boolean firstBoolean, boolean notOperation) {
+        switch (currentSize) {
             case 1:
-                return FilterFactory.getInstance().getFilter(filterName,notOperation);
+                return FilterFactory.getInstance().getFilter(filterName, notOperation);
             case 2:
-                if (firstBoolean!=null){
-                    return FilterFactory.getInstance().getFilter(filterName,firstBoolean,notOperation);
-                }else if (firstDouble!=null){
-                    FileFilter filterToSend=FilterFactory.getInstance().getFilter(filterName,firstDouble,
+                if (firstBoolean != null) {
+                    return FilterFactory.getInstance().getFilter(filterName, firstBoolean, notOperation);
+                } else if (firstDouble != null) {
+                    FileFilter filterToSend = FilterFactory.getInstance().getFilter(filterName, firstDouble,
                             notOperation);
-                    if (filterToSend==null){//if the keyWord aint ment to be Double.
-                        filterToSend=FilterFactory.getInstance().getFilter(filterName,stringToFilter,
+                    if (filterToSend == null) {//if the keyWord aint ment to be Double.
+                        filterToSend = FilterFactory.getInstance().getFilter(filterName, stringToFilter,
                                 notOperation);
                     }
                     return filterToSend;
-                }else if (stringToFilter!=null){
-                    return FilterFactory.getInstance().getFilter(filterName,stringToFilter,notOperation);
-                }break;
+                } else if (stringToFilter != null) {
+                    return FilterFactory.getInstance().getFilter(filterName, stringToFilter, notOperation);
+                }
+                break;
             case 3:
-                if (firstDouble!=null&&secondDouble!=null){
-                    return FilterFactory.getInstance().getFilter(filterName,secondDouble,firstDouble,
+                if (firstDouble != null && secondDouble != null) {
+                    return FilterFactory.getInstance().getFilter(filterName, secondDouble, firstDouble,
                             notOperation);
                 }
             default:
@@ -191,13 +201,14 @@ public class CurrentSecession {
         }
         return null;
     }
+
     /*
-    * return true if the string is boolean yes and false if it is no, return null if the string isnt yes/no
+     * return true if the string is boolean yes and false if it is no, return null if the string isnt yes/no
      */
-    private Boolean isBoolean(String stringToCheck){
-        if (stringToCheck.equals(NOT_UPHOLD_OPERATOR)){
+    private Boolean isBoolean(String stringToCheck) {
+        if (stringToCheck.equals(NOT_UPHOLD_OPERATOR)) {
             return false;
-        }else if (stringToCheck.equals(UPHOLD_OPERATOR)){
+        } else if (stringToCheck.equals(UPHOLD_OPERATOR)) {
             return true;
         }
         return null;
@@ -208,7 +219,7 @@ public class CurrentSecession {
      * @param stringToCheck
      * @return double value if the string is a double , null otherwise.
      */
-    private Double getDouble(String stringToCheck){
+    private Double getDouble(String stringToCheck) {
         try {
             return Double.parseDouble(stringToCheck);
         } catch (NumberFormatException e) {
@@ -216,20 +227,20 @@ public class CurrentSecession {
         }
     }
 
-    private Comparator<FileFacade> readSortKey(String sorterKey){
-        String[] values=sorterKey.split(VALUES_SEPARATOR);
-        if (values.length>2||values.length<1){
+    private Comparator<FileFacade> readSortKey(String sorterKey) {
+        String[] values = sorterKey.split(VALUES_SEPARATOR);
+        if (values.length > 2 || values.length < 1) {
             return null;
         }
-        boolean isRevers= false;
-        String sorterName=values[0];
-        if (values.length==2){
-            if(!values[1].equals(REVERSE_SORT_KEY_VALUE)){
+        boolean isRevers = false;
+        String sorterName = values[0];
+        if (values.length == 2) {
+            if (!values[1].equals(REVERSE_SORT_KEY_VALUE)) {
                 return null;
-            }else {
-                isRevers=true;
+            } else {
+                isRevers = true;
             }
         }
-        return SortFactory.getInstance().getComparator(sorterName,isRevers);
+        return SortFactory.getInstance().getComparator(sorterName, isRevers);
     }
 }

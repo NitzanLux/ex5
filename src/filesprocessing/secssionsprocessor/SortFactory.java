@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 /*
  * an singleton class which generate FileFilter according to the given parameters.
- * @authors liorit,nlux.
+ * @authors liorait,nlux.
  */
 class SortFactory {
     /*--class singleton instance--*/

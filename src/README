@@ -27,18 +27,23 @@ SortFactory.java - Holds all possible types of sorter, implements the sorting me
 =          Design           =
 =============================
 The design is as following: In the SectionProcessor package are the following java classes: CurrentSecssion,
- FilterFactory, SecessionCreationException,
-SortFactory. The classes are in the same package because they are used to filter and order the files.
+FilterFactory, SecessionCreationException, SortFactory.
+The classes are in the same package because they are used to filter and order the files.
+The other classes are used to read the command file's data, checking for type 2 errors, and then for each
+section in the command file, the filter and order values are sent to CurrentSecession class.
+The classes in he secssionprocessor package are used to filter and order the files by the filter and order values,
+and then the sorted list of names of the files that match the filter is sent back to FileAnalyzer class, that prints
+the file's names.The FileAnalyzer class sents the filter and order values of each section until the end of the sections in the commanf file.
 The FilterFactory and SortFactory uses enum because it saves constants values and it doesn't change when the
 program is running.
 It is also very simple to add a new filter/order type - we simply add it to the enum, and no more work is
- needed. That's why it uses the Single Choice principle.
+needed. That's why it uses the Single Choice principle.
 The methodology of FilterFactory and SortFactory are equal, only that the FilterFactory has
- more parameters to filter.
+more parameters to filter.
 Exceptions - there are two basic classes of Exceptions, one for type 1 exceptions and the other one for type
- 2 exceptions.
+2 exceptions.
 The SecssionCreationException is not private and that's why it is in the same package with the classes that
- use this exception.
+use this exception.
 The exceptions are handeled by the program and print according messages.
 We use the factory design pattern in the SortFactory and FilterFactory classes.
 

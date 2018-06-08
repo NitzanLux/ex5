@@ -1,6 +1,5 @@
 package filesprocessing;
 
-
 import filesprocessing.secssionsprocessor.CurrentSecession;
 import filesprocessing.secssionsprocessor.SecessionCreationException;
 
@@ -8,7 +7,10 @@ import java.util.ArrayList;
 import java.lang.*;
 
 /*
- *
+ * Creates a singleton FileAnalyzer instance, which is used to check if there are exceptions in the file,
+ * and if there are no exceptions, will filter and order the files in the directory by each section,
+ * using the CurrentSecession class.
+ * @author nlux, liorait.
  */
 class FileAnalyzer {
     private static FileAnalyzer instance = new FileAnalyzer();
@@ -25,16 +27,16 @@ class FileAnalyzer {
     }
 
     /*
-     * @return file anlayzer instance.
+     * @return file analyzer instance.
      */
     static FileAnalyzer getInstance() {
         return instance;
     }
 
-    /* This method goes through the array list that contains the file data, First,
-     * it looks for type 2 exceptions, if found,
-     * it throws exceptions. If there are no type 2 exceptions, it goes over the file, and for each section
-     *it filters and orders the files
+    /* This method goes through the array list that contains the command's file data. First,
+     * it looks for type 2 exceptions, if found, it throws exceptions.
+     * If there are no type 2 exceptions, it goes over the file, and for each section
+     * it filters and orders the files, by sending each section to CurrentSecession class.
      */
     void analyzeStringList(ArrayList<String> fileData) throws TypeTwoExceptions.BadFilterSectionName,
             TypeTwoExceptions.BadOrderSectionName, TypeTwoExceptions.BadFormatFile {
@@ -57,7 +59,7 @@ class FileAnalyzer {
                 orderValue = DEFAULT_SORTER;
             } else {
                 orderValue = fileData.get(i);
-                orderLine = i+1;
+                orderLine = i + 1;
             }
             try {
                 CurrentSecession.getInstance().setFilter(filterValue);
@@ -94,7 +96,7 @@ class FileAnalyzer {
                 return ++lineNumber;
             }
         }
-        if (fileData.size()<=lineNumber){
+        if (fileData.size() <= lineNumber) {
             throw new TypeTwoExceptions.BadFormatFile();
         }
         if (fileData.get(lineNumber).toUpperCase().equals(FILTER_HEADLINE)) {
@@ -116,7 +118,7 @@ class FileAnalyzer {
                 return ++lineNumber;
             }
         }
-        if (fileData.size()<=lineNumber){
+        if (fileData.size() <= lineNumber) {
             throw new TypeTwoExceptions.BadFormatFile();
         }
         if (fileData.get(lineNumber).toUpperCase().equals(ORDER_HEADLINE)) {

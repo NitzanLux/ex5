@@ -5,8 +5,13 @@ import java.util.ArrayList;
 
 /*
  * This class reads the text from the command file and saves it in an array list of Strings.
+ * @author nlux, liorait.
  */
 class CommandFile extends FileFacade {
+
+   /*
+    *  Creates a new CommandFile object
+    */
     CommandFile(String s) {
         super(s);
     }
@@ -18,9 +23,7 @@ class CommandFile extends FileFacade {
     ArrayList<String> readFile() throws TypeTwoExceptions.IOProblemInCommandFile {
 
         ArrayList<String> fileData = new ArrayList<>();
-
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.getAbsolutePath()))) {
-
             String line;
             int i = 0;
             // runs all over the file, while the file not over, and adds each line to the arrayList
