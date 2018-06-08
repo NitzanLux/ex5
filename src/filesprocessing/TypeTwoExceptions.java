@@ -5,20 +5,19 @@ package filesprocessing;
  * @author nlux, liorait.
  */
 abstract class TypeTwoExceptions extends Exception {
-    /*--constance--*/
+    /*--constants--*/
     private static final long serialVersionUID = 1L;
     private static final String TYPE_2_ERROR_PREFIX = "ERROR: %s";
     private static final String BAD_FILTER_MSG = "FILTER sub-section missing";
     private static final String BAD_ORDER_MSG = "ORDER sub-section missing";
     private static final String BAD_FORMAT_MSG = "Bad format";
     private static final String FILE_NOT_FOUND_MSG = "file not found";
-    private static final String INCORRECT_AMOUNT_MSG = "Wrong usage. Should receive 2" +
-            " arguments";
+    private static final String INCORRECT_AMOUNT_MSG = "Wrong usage. Should receive 2" + " arguments";
     private static final String NO_FILES_IN_SOURCEDIR = "No files in sourcedir";
     private static final String IO_COMMANDFILE_ERROR_MSG = "problem with accessing commandFile";
 
     /*
-     * constractor rais exception which is type two exption constractor.
+     * constructor raises exception which is type two exception constructor.
      * @param msg
      */
     TypeTwoExceptions(String msg) {
@@ -26,7 +25,7 @@ abstract class TypeTwoExceptions extends Exception {
     }
 
     /*
-     * bad filter section name exeption.
+     * bad filter section name exception.
      */
     static class BadFilterSectionName extends TypeTwoExceptions {
         /*

@@ -130,6 +130,7 @@ class FileAnalyzer {
                 return ++lineNumber;
             }
         }
+        // Checks if the size of fileData is smaller than lineNumber
         if (fileData.size() <= lineNumber) {
             throw new TypeTwoExceptions.BadFormatFile();
         }

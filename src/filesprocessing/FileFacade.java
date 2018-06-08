@@ -13,7 +13,7 @@ public class FileFacade {
     private static final int NO_DOT_IN_FILE = -1;
     private static final String SUFFIX_INDICATORS = ".";
     private File file;
-    
+
     /**
      * creates a new FileFacade instance
      *

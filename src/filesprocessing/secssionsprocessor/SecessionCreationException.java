@@ -1,6 +1,5 @@
 package filesprocessing.secssionsprocessor;
 
-
 /**
  * an abstract exception class that regard CurrentSession couldent constract a filter or an object.
  * @author nlux,liorait.

@@ -15,6 +15,10 @@ import java.util.Comparator;
 public class CurrentSecession {
     private static CurrentSecession instance = new CurrentSecession();
 
+    /**
+     * returns an instance of Currentecession
+     * @return an instance of Currentecession
+     */
     public static CurrentSecession getInstance() {
         return instance;
     }
@@ -37,12 +41,16 @@ public class CurrentSecession {
     private Comparator<FileFacade> currentSort;
 
     /*
-     * default constractor.
+     * default constructor.
      */
     private CurrentSecession() {
         setDefaultValus();
     }
 
+    /**
+     * Sets the current path
+     * @param path - the path to set
+     */
     public void setCurrentPath(FileFacade path) {
         this.path = path;
     }
@@ -55,9 +63,8 @@ public class CurrentSecession {
         currentFileFilter = FilterFactory.getInstance().getAllFilter();
     }
 
-
     /**
-     * set the currnt path name for extraction.
+     * set the current path name for extraction.
      *
      * @param path the path name.
      */
@@ -66,11 +73,10 @@ public class CurrentSecession {
     }
 
     /**
-     * set current secssion sorter
-     *
+     * set current section sorter
      * @param sorterKey the name of the sorter
-     * @throws SecessionCreationException.SorterCreationException cannot create sorter with the fiven order
-     *                                                            key name.
+     * @throws SecessionCreationException.SorterCreationException
+     * cannot create sorter with the given order key name.
      */
     public void setSorter(String sorterKey) throws SecessionCreationException.SorterCreationException {
         Comparator<FileFacade> comparator = readSortKey(sorterKey);
@@ -83,7 +89,7 @@ public class CurrentSecession {
     }
 
     /**
-     * set current secssion filter.
+     * set current section filter.
      *
      * @param filterKey the name of the filter
      * @throws SecessionCreationException.FilterCreationException cannot create sorter with the fiven filter
@@ -100,9 +106,9 @@ public class CurrentSecession {
     }
 
     /**
-     * get currnt Session list of files.
+     * get current Session list of files.
      *
-     * @return orderd array of files names.
+     * @return ordered array of files names.
      */
     public String[] getCurrentSessionOutput() {
         FileFacade[] files = path.listFiles(currentFileFilter);
@@ -113,7 +119,6 @@ public class CurrentSecession {
         }
         setDefaultValus();
         return secessionFilesOutputNames;
-
     }
 
     /*

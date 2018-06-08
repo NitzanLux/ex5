@@ -21,7 +21,6 @@ class CommandFile extends FileFacade {
      * @return the array list representing all the strings in the file
      */
     ArrayList<String> readFile() throws TypeTwoExceptions.IOProblemInCommandFile {
-
         ArrayList<String> fileData = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(this.getAbsolutePath()))) {
             String line;

@@ -62,7 +62,7 @@ The SortFactory and FilterFactory use enums for the sorting and filtering values
 =============================
 =    Answers to questions   =
 =============================
-1) Described above.
+1) The design is described in the Design section.
 2) The errors hierarchy: There are two errors classes that extends the Exception class:
 TypeTwoExceptions and SecessionCreationException.
 Inside each one of the classes there are nested classes for exceptions that are from the same type.

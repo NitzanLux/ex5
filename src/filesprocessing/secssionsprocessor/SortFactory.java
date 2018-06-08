@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 /*
  * an singleton class which generate FileFilter according to the given parameters.
- * @authors liorait,nlux.
+ * @authors liorait, nlux.
  */
 class SortFactory {
     /*--class singleton instance--*/
@@ -54,13 +54,13 @@ class SortFactory {
 
         /*
          * abstract method for compering 2 files the fires one is the current file and
-         * the outher one is the one to compere with
+         * the other one is the one to compere with
          */
         abstract int compareIt(FileFacade currentFile, FileFacade fileToComper);
 
         /**
-         * override the enum metod return the enum name with lowercase.
-         * @return enum name with lower case .
+         * override the enum method. return the enum name with lowercase.
+         * @return enum name with lower case.
          */
         @Override
         public String toString() {
