@@ -8,6 +8,7 @@ import java.util.ArrayList;
 /**
  * The main class. receives two arguments - the directory of files to filter&sort, and the command file.
  * If the arguments are valid, will filter and sort the files, for each section in the command file.
+ * @author liorit,nlux
  */
 public class DirectoryProcessor {
     /*--constants--*/

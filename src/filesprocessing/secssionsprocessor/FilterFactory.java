@@ -50,11 +50,17 @@ class FilterFactory {
         abstract boolean filter(double fileSize, double threshold);
 
         /*
-         * cheack a file and a threshold and
+         * cheack a file and a threshold.
          */
         boolean isFiltered(File file, double threshold) {
             double fileLengthInKb = ((double) file.length() / BYTE_IT_KB);
             return filter(fileLengthInKb, threshold);
+        }
+        /*
+        * cheack a file and a threshold greather/smaller then and equls.
+         */
+        boolean isFilterdEquals(File file, double threshold){
+            return isFiltered(file,threshold)||((double)file.length()/BYTE_IT_KB)==threshold;
         }
 
         /**
@@ -75,8 +81,8 @@ class FilterFactory {
     private enum TwoFactorMathComparison {
         BETWEEN() {
             boolean isFiltered(File file, double maxBar, double minBar) {
-                return MathComparison.GREATER_THAN.isFiltered(file, minBar) &&
-                        MathComparison.SMALLER_THAN.isFiltered(file, maxBar);
+                return MathComparison.GREATER_THAN.isFilterdEquals(file, minBar) &&
+                                MathComparison.SMALLER_THAN.isFilterdEquals(file, maxBar);
             }
         };
 
