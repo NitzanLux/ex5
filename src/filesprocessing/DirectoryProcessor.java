@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * If the arguments are valid, will filter and sort the files, for each section in the command file.
  */
 public class DirectoryProcessor {
-
+    /*--constants--*/
     private static final int MIN_NUM_OF_ARGUMENTS = 1;
     private static final int PATH_NAME_POSITION = 0;
     private static final int COMMAND_NAME_POSITION = 1;
