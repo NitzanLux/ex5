@@ -90,12 +90,9 @@ public class FileFacade  {
      * @return fileType
      */
     public String getType(){
-       String fileType=null;
         int lastDot=file.getName().lastIndexOf(SUFFIX_INDICATORS);
         String fileName=file.getName();
-        if (lastDot!= NO_DOT_IN_FILE){
-        fileType=fileName.substring(++lastDot);
-       }
-        return fileType;
+        return fileName.substring(lastDot);
+
     }
 }

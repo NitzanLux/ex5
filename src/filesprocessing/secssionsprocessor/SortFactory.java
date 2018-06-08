@@ -32,7 +32,7 @@ class SortFactory {
         },
         TYPE() {
             int compareIt(FileFacade currentFile, FileFacade fileToComper) {
-                int toReturn= currentFile.getType().compareTo(currentFile.getType());
+                int toReturn= currentFile.getType().compareTo(fileToComper.getType());
                 if (toReturn== EQUAL_FACTOR) {
                     toReturn=ABS.compareIt(currentFile,fileToComper);
                 }
@@ -96,7 +96,7 @@ class SortFactory {
      * get the "abs" comparator
      */
     Comparator<FileFacade> getAbsComparator(){
-        return getComparator(Sort.ABS.toString(),true);
+        return getComparator(Sort.ABS.toString(),false);
     }
 }
 

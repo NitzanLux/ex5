@@ -10,12 +10,12 @@ class FilterFactory {
     /* constants*/
     private static final String ALL_FILTER_KEY_WORD = "all";
     /*
-    * instance.
+     * instance.
      */
     private static FilterFactory instance = new FilterFactory();
 
     /*
-    * instance private constructor.
+     * instance private constructor.
      */
     private FilterFactory() {
     }
@@ -28,7 +28,7 @@ class FilterFactory {
     }
 
     /*
-    * enum which its values check filter using a single double argument.
+     * enum which its values check filter using a single double argument.
      */
     private enum MathComparison {
         GREATER_THAN() {
@@ -42,7 +42,7 @@ class FilterFactory {
             }
         };
         /*--constants--*/
-        private static final int BYTE_IT_KB = 1024;
+        private static final double BYTE_IT_KB = 1024d;//for double division.
 
         /*
          * abstract methode which determine the filter behavior.
@@ -53,7 +53,8 @@ class FilterFactory {
          * cheack a file and a threshold and
          */
         boolean isFiltered(File file, double threshold) {
-            return filter(file.length() / BYTE_IT_KB, threshold);
+            double fileLengthInKb = ((double) file.length() / BYTE_IT_KB);
+            return filter(fileLengthInKb, threshold);
         }
 
         /**
@@ -67,8 +68,9 @@ class FilterFactory {
         }
 
     }
+
     /*
-    * enum which its values check filter using a two double argument.
+     * enum which its values check filter using a two double argument.
      */
     private enum TwoFactorMathComparison {
         BETWEEN() {
@@ -77,6 +79,7 @@ class FilterFactory {
                         MathComparison.SMALLER_THAN.isFiltered(file, maxBar);
             }
         };
+
         /*
          * abstract method which determine the filter behavior.
          */
@@ -92,8 +95,9 @@ class FilterFactory {
             return super.toString().toLowerCase();
         }
     }
+
     /*
-    * enum which its values check filter without parameters
+     * enum which its values check filter without parameters
      */
     private enum NonFactorComparison {
         ALL() {
@@ -114,6 +118,7 @@ class FilterFactory {
             return super.toString().toLowerCase();
         }
     }
+
     /*
      * enum which its values check filter with string parameter.
      */
@@ -152,6 +157,7 @@ class FilterFactory {
         }
 
     }
+
     /*
      * enum which its values check filter with boolean parameter.
      */
@@ -229,8 +235,7 @@ class FilterFactory {
             return null;
         }
         final TwoFactorMathComparison currentFactor = twoFactorMathComparison;
-        return file -> (MathComparison.GREATER_THAN.isFiltered(file, minBar) &&
-                currentFactor.isFiltered(file, maxBar, minBar)) != isNot && file.isFile();
+        return file -> (currentFactor.isFiltered(file, maxBar, minBar)) != isNot && file.isFile();
     }
 
     /*
@@ -277,7 +282,7 @@ class FilterFactory {
             final FileStateComparison fileStateComparison = fileStateComparisonFilter;
             return file -> {
                 boolean answer = fileStateComparison.isFiltered(file);
-                return answer == isUphold && answer != isNot && file.isFile();
+                return (answer == isUphold )!= isNot && file.isFile();
             };
         }
     }
@@ -302,6 +307,7 @@ class FilterFactory {
         final NonFactorComparison currentFilter = nonFactorComparison;
         return file -> currentFilter.isFiltered(file) != isNot && file.isFile();
     }
+
     /*
      * get the "all" filter.
      */

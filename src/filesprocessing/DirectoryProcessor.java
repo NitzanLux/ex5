@@ -1,6 +1,8 @@
 package filesprocessing;
 
 import filesprocessing.secssionsprocessor.CurrentSecession;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -13,32 +15,47 @@ public class DirectoryProcessor {
     private static final int PATH_NAME_POSITION = 0;
     private static final int COMMAND_NAME_POSITION = 1;
 
-    public static void main(String [] args) throws TypeTwoExceptions.BadFilterSectionName,
-            TypeTwoExceptions.BadOrderSectionName,
-            TypeTwoExceptions.IncorrectAmountOfArguments,
-            TypeTwoExceptions.FileNotFoundException, TypeTwoExceptions.NoFilesInSourceDir,
-            TypeTwoExceptions.BadFormatFile {
-        checkArgs(args); // checks the validation of arguments, if valid, continues
-        String commendFileName = args[COMMAND_NAME_POSITION];
-        CommandFile commandFile = new CommandFile(commendFileName); // creates a new instance of CommandFile
-        FileFacade path=new FileFacade(args[PATH_NAME_POSITION]);
-        // Checks if the commend file is a valid file, if not, throws exception
-        if (!(commandFile.isFile())){
-            throw new TypeTwoExceptions.FileNotFoundException();
-        }else if (!(path.isDirectory())){
-            throw new TypeTwoExceptions.NoFilesInSourceDir();
+    public static void main(String[] args) {
+        boolean excepsionOccure = false;
+        try {
+            checkArgs(args); // checks the validation of arguments, if valid, continues
+        } catch (TypeTwoExceptions.IncorrectAmountOfArguments incorrectAmountOfArguments) {
+            excepsionOccure = true;
+            System.err.println(incorrectAmountOfArguments.getMessage());
         }
-        else{
-            ArrayList<String> commendFileData = commandFile.readFile();// saves the command file's data to
-            // an array list of Strings
-            CurrentSecession.getInstance().setCurrentPath(path);
-            FileAnalyzer.getInstance().analyzeStringList(commendFileData);
+        if (!excepsionOccure) {
+            String commendFileName = args[COMMAND_NAME_POSITION];
+            CommandFile commandFile = new CommandFile(commendFileName);//creates a new instance of CommandFile
+            FileFacade path = new FileFacade(args[PATH_NAME_POSITION]);
+            // Checks if the commend file is a valid file, if not, throws exception
+            if (!(commandFile.isFile())) {
+                System.err.println(new TypeTwoExceptions.FileNotFoundException().getMessage());
+            } else if (!(path.isDirectory())) {
+                System.err.println(new TypeTwoExceptions.NoFilesInSourceDir().getMessage());
+            } else {
+                ArrayList<String> commendFileData = null;// saves the command file's data to
+                try {
+                    commendFileData = commandFile.readFile();
+                } catch (TypeTwoExceptions.IOProblemInCommandFile ioProblemInCommandFile) {
+                    System.err.println(ioProblemInCommandFile.getMessage());
+                    excepsionOccure = true;
+                }
+                if (!excepsionOccure) {
+                    // an array list of Strings
+                    CurrentSecession.getInstance().setCurrentPath(path);
+                    try {
+                        FileAnalyzer.getInstance().analyzeStringList(commendFileData);
+                    } catch (TypeTwoExceptions typeTwoExceptions) {
+                        System.err.println(typeTwoExceptions.getMessage());
+                    }
+                }
+            }
         }
     }
 
-    private static void checkArgs(String[]args) throws TypeTwoExceptions.IncorrectAmountOfArguments {
+    private static void checkArgs(String[] args) throws TypeTwoExceptions.IncorrectAmountOfArguments {
         // Checks if the number of arguments is smaller then 2 - in this case throws exception and stops
-        if (args.length < MIN_NUM_OF_ARGUMENTS){
+        if (args.length < MIN_NUM_OF_ARGUMENTS) {
             throw new TypeTwoExceptions.IncorrectAmountOfArguments();
         }
     }
