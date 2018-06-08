@@ -9,18 +9,17 @@ liorait
 FilesProcessor.java - The main class. This class receives two arguments: the directory of the files to sort
 and filter, and the command file.
 FileFacade.java - a facade for the File class, contains basic operations that are performed on files, for
- example isFile(), getName() etc.
-FileAnalyzer.java - This class is used to analyze the file's data. It gets an ArrayList of strings, checks
-errors, and then sends the filter and order value
-in each section to the CurrentSection class.
+example isFile(), getName() etc.
+FileAnalyzer.java - This class is used to analyze the command file's data. It gets an ArrayList of strings, checks
+errors, and then sends the filter and order value in each section to the CurrentSection class.
 CommandFile.java - represents a CommandFile, which is a type of File. Extends FileFacade.java.
 TypeTwoExceptions.java - This class includes nested classes of the possible type two errors. Extends
- Exception.java class.
+Exception.java class.
 CurrentSecssion.java - saves the data for the current secssion.
 FilterFactory.java - Holds all possible types of filter, and implements the filter method according to each
- filter type, returns an FileFilter instance
+filter type, returns an FileFilter instance
 SecessionCreationException.java - This class includes nested classes of the possible Filter/Sorter creation
- errors. Extends Exception.java.
+errors. Extends Exception.java.
 SortFactory.java - Holds all possible types of sorter, implements the sorting methods.
 
 =============================
@@ -28,14 +27,15 @@ SortFactory.java - Holds all possible types of sorter, implements the sorting me
 =============================
 The design is as following: In the SectionProcessor package are the following java classes: CurrentSecssion,
 FilterFactory, SecessionCreationException, SortFactory.
-The classes are in the same package because they are used to filter and order the files.
-The other classes are used to read the command file's data, checking for type 2 errors, and then for each
+The classes are in the same package because they are used to filter and order the files, and check for type 1 errors.
+The other classes are used to read the command file's data, check for type 2 errors, and then for each
 section in the command file, the filter and order values are sent to CurrentSecession class.
 The classes in he secssionprocessor package are used to filter and order the files by the filter and order values,
 and then the sorted list of names of the files that match the filter is sent back to FileAnalyzer class, that prints
-the file's names.The FileAnalyzer class sents the filter and order values of each section until the end of the sections in the commanf file.
-The FilterFactory and SortFactory uses enum because it saves constants values and it doesn't change when the
-program is running.
+the names of the files. The FileAnalyzer class sends the filter and order values of each section until the end of the
+sections in the command file.
+The FilterFactory and SortFactory uses enum because it saves constants values and it doesn't
+change when the program is running.
 It is also very simple to add a new filter/order type - we simply add it to the enum, and no more work is
 needed. That's why it uses the Single Choice principle.
 The methodology of FilterFactory and SortFactory are equal, only that the FilterFactory has
@@ -44,32 +44,30 @@ Exceptions - there are two basic classes of Exceptions, one for type 1 exception
 2 exceptions.
 The SecssionCreationException is not private and that's why it is in the same package with the classes that
 use this exception.
-The exceptions are handeled by the program and print according messages.
+The exceptions are handled by the program and print according messages.
 We use the factory design pattern in the SortFactory and FilterFactory classes.
 
 =============================
 =  Implementation details   =
 =============================
 In the FilesProcessor class we first read the file and save it's data in an arrayList of strings.
-This is done so we can read the command file
-at once and then close the file. We use an arrayList because we don't know the amount of lines in the file.
- When having the arrayList of the file's
-data we first check for type 2 errors in the FileAnalyzer, and if no such errors were found,
- it runs all over the arrayList and for each section it filters
+This is done so we can read the command file at once and then close the file.
+We use an arrayList because we don't know the amount of lines in the file.
+When having the arrayList of the file's data we first check for type 2 errors in the FileAnalyzer,
+and if no such errors were found, it runs all over the arrayList and for each section it filters
 and orders the files. The FileAnalyzer uses Single tone instance, because it keeps the encapsulation,
- and no instances of this class should be created.
+and no instances of this class should be created.
 The SortFactory and FilterFactory use enums for the sorting and filtering values.
 
 =============================
 =    Answers to questions   =
 =============================
 1) Described above.
-2) The errors hirerchary: There are two errors classes that extends the Exception class:
- TYpeTwoExceptions and SecessionCreationException.
+2) The errors hierarchy: There are two errors classes that extends the Exception class:
+TypeTwoExceptions and SecessionCreationException.
 Inside each one of the classes there are nested classes for exceptions that are from the same type.
-This design was chosen because there is different treatment to the diffrent errors types:
- type 1 erros are printed but the program continues
-to run, type 2 errors are handeled and stop the program.
+This design was chosen because there is different treatment to the different errors types:
+type 1 errors are printed and the program continues to run, type 2 errors are handled and stop the program.
 3) We used the array data structure to sort the files because it is the most
- efficient data structure in memory terms. In addition, we needed to iterate and keep
+efficient data structure in memory terms. In addition, we needed to iterate and keep
 the order that why we chose array and because we can know the number of values we didn't need an array list.
